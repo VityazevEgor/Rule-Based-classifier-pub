@@ -1,0 +1,48 @@
+{
+ "case_id": "CASE_0234",
+ "desired": {
+  "apiVersion": "policy/v1",
+  "kind": "PodDisruptionBudget",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/instance": "nginx-dev",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "nginx",
+    "app.kubernetes.io/version": "1.31.7",
+    "environment": "dev",
+    "helm.sh/chart": "nginx-25.2.5"
+   },
+   "name": "nginx-dev",
+   "namespace": "nginx-dev"
+  },
+  "spec": {
+   "minAvailable": 1,
+   "selector": {
+    "matchLabels": {
+     "app.kubernetes.io/instance": "nginx-dev",
+     "app.kubernetes.io/name": "nginx"
+    }
+   }
+  }
+ },
+ "diff": [
+  {
+   "new": {
+    "deployment.timestamp": "2026-10-22T10:00:00Z"
+   },
+   "old": null,
+   "op": "add",
+   "path": "/metadata/annotations"
+  },
+  {
+   "new": 0,
+   "old": 1,
+   "op": "replace",
+   "path": "/spec/minAvailable"
+  }
+ ],
+ "environment": "dev",
+ "namespace": "nginx-dev",
+ "resource_kind": "PodDisruptionBudget",
+ "resource_name": "nginx-dev"
+}

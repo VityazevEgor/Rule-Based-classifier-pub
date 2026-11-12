@@ -1,0 +1,54 @@
+{
+ "case_id": "CASE_0188",
+ "desired": {
+  "apiVersion": "networking.k8s.io/v1",
+  "kind": "Ingress",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/instance": "nginx-prod",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "nginx",
+    "app.kubernetes.io/version": "1.31.7",
+    "environment": "prod",
+    "helm.sh/chart": "nginx-25.2.5"
+   },
+   "name": "nginx-prod",
+   "namespace": "nginx-prod"
+  },
+  "spec": {
+   "rules": [
+    {
+     "host": "nginx.local",
+     "http": {
+      "paths": [
+       {
+        "backend": {
+         "service": {
+          "name": "nginx-prod",
+          "port": {
+           "name": "http"
+          }
+         }
+        },
+        "path": "/",
+        "pathType": "Prefix"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ },
+ "diff": [
+  {
+   "new": "api.nginx.local",
+   "old": "nginx.local",
+   "op": "replace",
+   "path": "/spec/rules/0/host"
+  }
+ ],
+ "environment": "prod",
+ "namespace": "nginx-prod",
+ "resource_kind": "Ingress",
+ "resource_name": "nginx-prod"
+}

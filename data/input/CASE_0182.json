@@ -1,0 +1,65 @@
+{
+ "case_id": "CASE_0182",
+ "desired": {
+  "apiVersion": "v1",
+  "kind": "Service",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/instance": "rabbitmq-prod",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "rabbitmq",
+    "app.kubernetes.io/version": "4.1.3",
+    "environment": "prod",
+    "helm.sh/chart": "rabbitmq-16.0.14"
+   },
+   "name": "rabbitmq-prod",
+   "namespace": "rabbitmq-prod"
+  },
+  "spec": {
+   "ports": [
+    {
+     "name": "amqp",
+     "nodePort": null,
+     "port": 5672,
+     "targetPort": "amqp"
+    },
+    {
+     "name": "epmd",
+     "nodePort": null,
+     "port": 4369,
+     "targetPort": "epmd"
+    },
+    {
+     "name": "dist",
+     "nodePort": null,
+     "port": 25672,
+     "targetPort": "dist"
+    },
+    {
+     "name": "http-stats",
+     "nodePort": null,
+     "port": 15672,
+     "targetPort": "stats"
+    }
+   ],
+   "selector": {
+    "app.kubernetes.io/instance": "rabbitmq-prod",
+    "app.kubernetes.io/name": "rabbitmq"
+   },
+   "sessionAffinity": "None",
+   "type": "ClusterIP"
+  }
+ },
+ "diff": [
+  {
+   "new": "rabbitmq-v2",
+   "old": "rabbitmq",
+   "op": "replace",
+   "path": "/spec/selector/app.kubernetes.io~1name"
+  }
+ ],
+ "environment": "prod",
+ "namespace": "rabbitmq-prod",
+ "resource_kind": "Service",
+ "resource_name": "rabbitmq-prod"
+}

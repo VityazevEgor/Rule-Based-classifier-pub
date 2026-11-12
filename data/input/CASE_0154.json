@@ -1,0 +1,49 @@
+{
+ "case_id": "CASE_0154",
+ "desired": {
+  "apiVersion": "v1",
+  "kind": "Service",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/component": "master",
+    "app.kubernetes.io/instance": "redis-prod",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "redis",
+    "app.kubernetes.io/version": "8.10.2",
+    "environment": "prod",
+    "helm.sh/chart": "redis-28.3.1"
+   },
+   "name": "redis-prod-master",
+   "namespace": "redis-prod"
+  },
+  "spec": {
+   "internalTrafficPolicy": "Cluster",
+   "ports": [
+    {
+     "name": "tcp-redis",
+     "nodePort": null,
+     "port": 6379,
+     "targetPort": "redis"
+    }
+   ],
+   "selector": {
+    "app.kubernetes.io/component": "master",
+    "app.kubernetes.io/instance": "redis-prod",
+    "app.kubernetes.io/name": "redis"
+   },
+   "type": "ClusterIP"
+  }
+ },
+ "diff": [
+  {
+   "new": "145",
+   "old": null,
+   "op": "add",
+   "path": "/metadata/labels/build-number"
+  }
+ ],
+ "environment": "prod",
+ "namespace": "redis-prod",
+ "resource_kind": "Service",
+ "resource_name": "redis-prod-master"
+}

@@ -1,0 +1,46 @@
+{
+ "case_id": "CASE_0038",
+ "desired": {
+  "apiVersion": "policy/v1",
+  "kind": "PodDisruptionBudget",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/instance": "rabbitmq-dev",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "rabbitmq",
+    "app.kubernetes.io/version": "4.1.3",
+    "environment": "dev",
+    "helm.sh/chart": "rabbitmq-16.0.14"
+   },
+   "name": "rabbitmq-dev",
+   "namespace": "rabbitmq-dev"
+  },
+  "spec": {
+   "minAvailable": 1,
+   "selector": {
+    "matchLabels": {
+     "app.kubernetes.io/instance": "rabbitmq-dev",
+     "app.kubernetes.io/name": "rabbitmq"
+    }
+   }
+  }
+ },
+ "diff": [
+  {
+   "new": "433",
+   "old": null,
+   "op": "add",
+   "path": "/metadata/labels/build-number"
+  },
+  {
+   "new": 0,
+   "old": 1,
+   "op": "replace",
+   "path": "/spec/minAvailable"
+  }
+ ],
+ "environment": "dev",
+ "namespace": "rabbitmq-dev",
+ "resource_kind": "PodDisruptionBudget",
+ "resource_name": "rabbitmq-dev"
+}

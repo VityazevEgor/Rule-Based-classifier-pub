@@ -1,0 +1,58 @@
+{
+ "case_id": "CASE_0289",
+ "desired": {
+  "apiVersion": "autoscaling/v2",
+  "kind": "HorizontalPodAutoscaler",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/instance": "nginx-prod",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "nginx",
+    "app.kubernetes.io/version": "1.31.7",
+    "environment": "prod",
+    "helm.sh/chart": "nginx-25.2.5"
+   },
+   "name": "nginx-prod",
+   "namespace": "nginx-prod"
+  },
+  "spec": {
+   "maxReplicas": 3,
+   "metrics": [
+    {
+     "resource": {
+      "name": "cpu",
+      "target": {
+       "averageUtilization": 80,
+       "type": "Utilization"
+      }
+     },
+     "type": "Resource"
+    }
+   ],
+   "minReplicas": 1,
+   "scaleTargetRef": {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "name": "nginx-prod"
+   }
+  }
+ },
+ "diff": [
+  {
+   "new": "team-infrastructure",
+   "old": null,
+   "op": "add",
+   "path": "/metadata/labels/owner"
+  },
+  {
+   "new": 15,
+   "old": 3,
+   "op": "replace",
+   "path": "/spec/maxReplicas"
+  }
+ ],
+ "environment": "prod",
+ "namespace": "nginx-prod",
+ "resource_kind": "HorizontalPodAutoscaler",
+ "resource_name": "nginx-prod"
+}

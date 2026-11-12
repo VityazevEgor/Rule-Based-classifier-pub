@@ -1,0 +1,42 @@
+{
+ "case_id": "CASE_0050",
+ "desired": {
+  "apiVersion": "policy/v1",
+  "kind": "PodDisruptionBudget",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/component": "master",
+    "app.kubernetes.io/instance": "redis-prod",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "redis",
+    "app.kubernetes.io/version": "8.10.2",
+    "environment": "prod",
+    "helm.sh/chart": "redis-28.3.1"
+   },
+   "name": "redis-prod-master",
+   "namespace": "redis-prod"
+  },
+  "spec": {
+   "minAvailable": 1,
+   "selector": {
+    "matchLabels": {
+     "app.kubernetes.io/component": "master",
+     "app.kubernetes.io/instance": "redis-prod",
+     "app.kubernetes.io/name": "redis"
+    }
+   }
+  }
+ },
+ "diff": [
+  {
+   "new": "8.10.3",
+   "old": "8.10.2",
+   "op": "replace",
+   "path": "/metadata/labels/app.kubernetes.io~1version"
+  }
+ ],
+ "environment": "prod",
+ "namespace": "redis-prod",
+ "resource_kind": "PodDisruptionBudget",
+ "resource_name": "redis-prod-master"
+}

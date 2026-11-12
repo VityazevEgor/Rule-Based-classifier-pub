@@ -1,0 +1,53 @@
+{
+ "case_id": "CASE_0095",
+ "desired": {
+  "apiVersion": "v1",
+  "kind": "Service",
+  "metadata": {
+   "annotations": {
+    "prometheus.io/scrape": "true"
+   },
+   "labels": {
+    "app.kubernetes.io/component": "metrics",
+    "app.kubernetes.io/instance": "prometheus-node-exporter-prod",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "prometheus-node-exporter",
+    "app.kubernetes.io/part-of": "prometheus-node-exporter",
+    "app.kubernetes.io/version": "1.12.1",
+    "environment": "prod",
+    "helm.sh/chart": "prometheus-node-exporter-4.60.0"
+   },
+   "name": "prometheus-node-exporter-prod",
+   "namespace": "prometheus-node-exporter-prod"
+  },
+  "spec": {
+   "ports": [
+    {
+     "name": "metrics",
+     "port": 9100,
+     "protocol": "TCP",
+     "targetPort": 9100
+    }
+   ],
+   "selector": {
+    "app.kubernetes.io/instance": "prometheus-node-exporter-prod",
+    "app.kubernetes.io/name": "prometheus-node-exporter"
+   },
+   "type": "ClusterIP"
+  }
+ },
+ "diff": [
+  {
+   "new": null,
+   "old": {
+    "prometheus.io/scrape": "true"
+   },
+   "op": "remove",
+   "path": "/metadata/annotations"
+  }
+ ],
+ "environment": "prod",
+ "namespace": "prometheus-node-exporter-prod",
+ "resource_kind": "Service",
+ "resource_name": "prometheus-node-exporter-prod"
+}

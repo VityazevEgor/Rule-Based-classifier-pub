@@ -1,0 +1,32 @@
+{
+ "case_id": "CASE_0266",
+ "desired": {
+  "apiVersion": "v1",
+  "automountServiceAccountToken": false,
+  "kind": "ServiceAccount",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/instance": "redis-prod",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "redis",
+    "app.kubernetes.io/version": "8.10.2",
+    "environment": "prod",
+    "helm.sh/chart": "redis-28.3.1"
+   },
+   "name": "redis-prod-master",
+   "namespace": "redis-prod"
+  }
+ },
+ "diff": [
+  {
+   "new": "redis-28.3.2",
+   "old": "redis-28.3.1",
+   "op": "replace",
+   "path": "/metadata/labels/helm.sh~1chart"
+  }
+ ],
+ "environment": "prod",
+ "namespace": "redis-prod",
+ "resource_kind": "ServiceAccount",
+ "resource_name": "redis-prod-master"
+}

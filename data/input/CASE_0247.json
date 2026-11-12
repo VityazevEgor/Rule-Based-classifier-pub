@@ -1,0 +1,36 @@
+{
+ "case_id": "CASE_0247",
+ "desired": {
+  "apiVersion": "v1",
+  "data": null,
+  "kind": "ConfigMap",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/component": "controller",
+    "app.kubernetes.io/instance": "ingress-nginx-prod",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "ingress-nginx",
+    "app.kubernetes.io/part-of": "ingress-nginx",
+    "app.kubernetes.io/version": "1.15.1",
+    "environment": "prod",
+    "helm.sh/chart": "ingress-nginx-4.15.1"
+   },
+   "name": "ingress-nginx-prod-controller",
+   "namespace": "ingress-nginx-prod"
+  }
+ },
+ "diff": [
+  {
+   "new": {
+    "log.level": "debug"
+   },
+   "old": null,
+   "op": "add",
+   "path": "/data"
+  }
+ ],
+ "environment": "prod",
+ "namespace": "ingress-nginx-prod",
+ "resource_kind": "ConfigMap",
+ "resource_name": "ingress-nginx-prod-controller"
+}

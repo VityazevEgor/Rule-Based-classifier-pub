@@ -1,0 +1,56 @@
+{
+ "case_id": "CASE_0027",
+ "desired": {
+  "apiVersion": "networking.k8s.io/v1",
+  "kind": "Ingress",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/instance": "nginx-dev",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "nginx",
+    "app.kubernetes.io/version": "1.31.7",
+    "environment": "dev",
+    "helm.sh/chart": "nginx-25.2.5"
+   },
+   "name": "nginx-dev",
+   "namespace": "nginx-dev"
+  },
+  "spec": {
+   "rules": [
+    {
+     "host": "nginx.local",
+     "http": {
+      "paths": [
+       {
+        "backend": {
+         "service": {
+          "name": "nginx-dev",
+          "port": {
+           "name": "http"
+          }
+         }
+        },
+        "path": "/",
+        "pathType": "Prefix"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ },
+ "diff": [
+  {
+   "new": {
+    "nginx.ingress.kubernetes.io/proxy-body-size": "100m"
+   },
+   "old": null,
+   "op": "add",
+   "path": "/metadata/annotations"
+  }
+ ],
+ "environment": "dev",
+ "namespace": "nginx-dev",
+ "resource_kind": "Ingress",
+ "resource_name": "nginx-dev"
+}

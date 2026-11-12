@@ -1,0 +1,52 @@
+{
+ "case_id": "CASE_0069",
+ "desired": {
+  "apiVersion": "v1",
+  "kind": "Service",
+  "metadata": {
+   "annotations": null,
+   "labels": {
+    "app.kubernetes.io/instance": "nginx-prod",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "nginx",
+    "app.kubernetes.io/version": "1.31.7",
+    "environment": "prod",
+    "helm.sh/chart": "nginx-25.2.5"
+   },
+   "name": "nginx-prod",
+   "namespace": "nginx-prod"
+  },
+  "spec": {
+   "externalTrafficPolicy": "Cluster",
+   "ports": [
+    {
+     "name": "http",
+     "port": 80,
+     "targetPort": "http"
+    },
+    {
+     "name": "https",
+     "port": 443,
+     "targetPort": "https"
+    }
+   ],
+   "selector": {
+    "app.kubernetes.io/instance": "nginx-prod",
+    "app.kubernetes.io/name": "nginx"
+   },
+   "type": "LoadBalancer"
+  }
+ },
+ "diff": [
+  {
+   "new": 1080,
+   "old": 80,
+   "op": "replace",
+   "path": "/spec/ports/0/port"
+  }
+ ],
+ "environment": "prod",
+ "namespace": "nginx-prod",
+ "resource_kind": "Service",
+ "resource_name": "nginx-prod"
+}

@@ -1,0 +1,647 @@
+# Декларативные правила классификации опасности drift.
+# Уровень опасности задаётся ТОЛЬКО category (таблица category x environment в engine.py):
+#   security_direct -> 4 | security_weakening -> 3 | availability -> 2 (dev) / 3 (prod)
+#   behavior -> 2 | cosmetic -> 1.
+# Для каждой операции (и каждого изменившегося узла внутри её значений) берётся первое
+# совпавшее правило при обходе категорий по убыванию опасности. Нет совпадений -> FALLBACK (класс 2).
+# Источники: инструкция разметки (Rubric_DriftBench_Annotation.md), документация Kubernetes.
+
+macros:
+  POD: '(?:/spec/template/spec|/spec/jobTemplate/spec/template/spec|/spec)'
+  TPLMETA: '(?:/spec/template/metadata|/spec/jobTemplate/spec/template/metadata)'
+  CTR: '{POD}/(?:containers|initContainers|ephemeralContainers)/\d+'
+  PROBE: '{CTR}/(?:readiness|liveness|startup)Probe'
+
+kind_groups:
+  WORKLOAD: [Deployment, StatefulSet, DaemonSet, ReplicaSet, Job, CronJob, Pod, ReplicationController]
+  RBAC_ROLE: [Role, ClusterRole]
+  RBAC_BINDING: [RoleBinding, ClusterRoleBinding]
+
+params:
+  trusted_registries:
+    - docker.io
+    - registry-1.docker.io
+    - index.docker.io
+    - quay.io
+    - registry.k8s.io
+    - k8s.gcr.io
+    - gcr.io
+    - ghcr.io
+    - mcr.microsoft.com
+    - public.ecr.aws
+    - docker.elastic.co
+    - registry.gitlab.com
+
+rules:
+  # ===================================================== security_direct (-> 4)
+  - id: R-HOST-001
+    description: Привилегированный контейнер (privileged true) - выход за пределы изоляции
+    category: security_direct
+    kinds: [WORKLOAD]
+    path: '{CTR}/securityContext/privileged'
+    op: [add, replace]
+    where: [{field: new, eq: true}]
+
+  - id: R-HOST-002
+    description: Общие пространства имён хоста (hostPID/hostNetwork/hostIPC true)
+    category: security_direct
+    kinds: [WORKLOAD]
+    path: '{POD}/(?:hostPID|hostNetwork|hostIPC)'
+    op: [add, replace]
+    where: [{field: new, eq: true}]
+
+  - id: R-HOST-003
+    description: Монтирование чувствительного пути хоста (/, /etc, /proc, /sys, docker.sock, ...)
+    category: security_direct
+    kinds: [WORKLOAD]
+    path: '{POD}/volumes/\d+/hostPath/path'
+    op: [add, replace]
+    where:
+      - {field: new, regex: '^/$|^/(?:etc|proc|sys|var/run|run|var/lib/(?:kubelet|docker|containerd)|var/log|root|dev|boot|usr|lib|bin|sbin)(?:/.*)?$'}
+
+  - id: R-HOST-004
+    description: Опасные Linux capabilities (SYS_ADMIN, SYS_MODULE, SYS_PTRACE и аналоги)
+    category: security_direct
+    kinds: [WORKLOAD]
+    path: '{CTR}/securityContext/capabilities/add(?:/\d+)?'
+    op: [add, replace]
+    where:
+      - {field: new, contains_any: [SYS_ADMIN, SYS_MODULE, SYS_PTRACE, SYS_RAWIO, DAC_READ_SEARCH, BPF, ALL]}
+
+  - id: R-RBAC-001
+    description: Wildcard '*' в verbs или resources правила RBAC
+    category: security_direct
+    kinds: [RBAC_ROLE]
+    path: '/rules/\d+/(?:verbs|resources)(?:/\d+)?'
+    op: [add, replace]
+    where: [{field: new, contains_any: ['*']}]
+
+  - id: R-RBAC-002
+    description: Доступ RBAC к secrets, pods/exec и аналогам
+    category: security_direct
+    kinds: [RBAC_ROLE]
+    path: '/rules/\d+/resources(?:/\d+)?'
+    op: [add, replace]
+    where: [{field: new, contains_any: [secrets, pods/exec, pods/attach, nodes/proxy, serviceaccounts/token]}]
+
+  - id: R-RBAC-003
+    description: Глаголы повышения привилегий RBAC (escalate, bind, impersonate)
+    category: security_direct
+    kinds: [RBAC_ROLE]
+    path: '/rules/\d+/verbs(?:/\d+)?'
+    op: [add, replace]
+    where: [{field: new, contains_any: [escalate, bind, impersonate]}]
+
+  - id: R-RBAC-004
+    description: Привязка к cluster-admin
+    category: security_direct
+    kinds: [RBAC_BINDING]
+    path: '/roleRef/name'
+    op: [add, replace]
+    where: [{field: new, eq: cluster-admin}]
+
+  - id: R-RBAC-005
+    description: Добавлен или изменён субъект привязки RBAC (в т.ч. system:authenticated, чужой ServiceAccount)
+    category: security_direct
+    kinds: [RBAC_BINDING]
+    path: '/subjects(?:/\d+(?:/(?:name|namespace|kind))?)?'
+    op: [add, replace]
+
+  - id: R-CRED-001
+    description: Учётные данные открытым текстом в ConfigMap (ключ)
+    category: security_direct
+    kinds: [ConfigMap]
+    path: '/data/[^/]+'
+    op: [add, replace]
+    where:
+      - {field: key, regex: '(?i)(?:password|passwd|pwd|secret|token|api[_.-]?key|access[_.-]?key|private[_.-]?key|credential)'}
+      - {field: new, is_empty: false}
+
+  - id: R-CRED-002
+    description: Учётные данные открытым текстом в значении ConfigMap (AKIA..., приватный ключ, password=...)
+    category: security_direct
+    kinds: [ConfigMap]
+    path: '/data/[^/]+'
+    op: [add, replace]
+    where:
+      - {field: new, regex: '(?i)AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|(?:password|passwd|secret|api[_-]?key|access[_-]?key|token)\s*[=:]\s*[^\s"'']{4,}'}
+
+  - id: R-CRED-003
+    description: Учётные данные открытым текстом в переменной окружения контейнера
+    category: security_direct
+    kinds: [WORKLOAD]
+    path: '{CTR}/env/\d+'
+    op: [add, replace]
+    where:
+      - {field: new.name, regex: '(?i)(?:password|passwd|pwd|secret|token|api[_-]?key|access[_-]?key|private[_-]?key|credential)'}
+      - {field: new.value, is_empty: false}
+
+  - id: R-CRED-004
+    description: Значение переменной окружения с учётными данными заменено на открытый текст
+    category: security_direct
+    kinds: [WORKLOAD]
+    path: '{CTR}/env/\d+/value'
+    op: [replace]
+    where:
+      - {field: desired_parent.name, regex: '(?i)(?:password|passwd|pwd|secret|token|api[_-]?key|access[_-]?key|private[_-]?key|credential)'}
+      - {field: new, is_empty: false}
+
+  - id: R-NET-001
+    description: Правило NetworkPolicy, разрешающее весь трафик ({})
+    category: security_direct
+    kinds: [NetworkPolicy]
+    path: '/spec/(?:ingress|egress)/\d+'
+    op: [add, replace]
+    where: [{field: new, eq: {}}]
+
+  - id: R-NET-002
+    description: Удалён ограничитель источников/получателей в правиле NetworkPolicy (from/to) - разрешён весь трафик
+    category: security_direct
+    kinds: [NetworkPolicy]
+    path: '/spec/(?:ingress|egress)/\d+/(?:from|to)'
+    op: [remove]
+
+  - id: R-NET-003
+    description: Правило NetworkPolicy открыто для 0.0.0.0/0
+    category: security_direct
+    kinds: [NetworkPolicy]
+    path: '/spec/(?:ingress|egress)/\d+/(?:from|to)/\d+/ipBlock/cidr'
+    op: [add, replace]
+    where: [{field: new, in: ['0.0.0.0/0', '::/0']}]
+
+  - id: R-SVC-001
+    description: Внутренний сервис (СУБД, кэш, брокер, служебный компонент) выведен наружу (NodePort/LoadBalancer)
+    category: security_direct
+    kinds: [Service]
+    path: '/spec/type'
+    op: [add, replace]
+    where:
+      - {field: new, in: [NodePort, LoadBalancer]}
+      - {field: resource_name, regex: '(?i)(?:redis|postgres|mysql|mariadb|mongo|kafka|rabbit|memcache|etcd|zookeeper|cassandra|elastic|nats|exporter|prometheus|alertmanager|grafana|consul|vault|minio|clickhouse|influx|sentinel|metrics|dashboard)'}
+
+  - id: R-IMG-001
+    description: Образ из стороннего непроверенного registry
+    category: security_direct
+    kinds: [WORKLOAD]
+    path: '{CTR}/image'
+    op: [add, replace]
+    where:
+      - {field: new_image.registry, registry_untrusted: trusted_registries}
+      - {field: new_image.registry, ne_field: old_image.registry}
+
+  # ================================================= security_weakening (-> 3)
+  - id: R-SC-001
+    description: allowPrivilegeEscalation включён
+    category: security_weakening
+    kinds: [WORKLOAD]
+    path: '{CTR}/securityContext/allowPrivilegeEscalation'
+    op: [add, replace]
+    where: [{field: new, eq: true}]
+
+  - id: R-SC-002
+    description: Удалён allowPrivilegeEscalation:false (по умолчанию эскалация разрешена)
+    category: security_weakening
+    kinds: [WORKLOAD]
+    path: '{CTR}/securityContext/allowPrivilegeEscalation'
+    op: [remove]
+    where: [{field: old, eq: false}]
+
+  - id: R-SC-003
+    description: Запуск от root (runAsUser 0 / runAsNonRoot false)
+    category: security_weakening
+    kinds: [WORKLOAD]
+    path: '(?:{CTR}|{POD})/securityContext/(?:runAsUser|runAsNonRoot)'
+    op: [add, replace]
+    where:
+      - {field: new, in: [0, false]}
+
+  - id: R-SC-004
+    description: Удалена защита runAsNonRoot/readOnlyRootFilesystem
+    category: security_weakening
+    kinds: [WORKLOAD]
+    path: '(?:{CTR}|{POD})/securityContext/(?:runAsNonRoot|readOnlyRootFilesystem)'
+    op: [remove]
+    where: [{field: old, eq: true}]
+
+  - id: R-SC-005
+    description: readOnlyRootFilesystem выключен
+    category: security_weakening
+    kinds: [WORKLOAD]
+    path: '{CTR}/securityContext/readOnlyRootFilesystem'
+    op: [add, replace]
+    where: [{field: new, eq: false}]
+
+  - id: R-SC-006
+    description: Удалён блок securityContext
+    category: security_weakening
+    kinds: [WORKLOAD]
+    path: '(?:{CTR}|{POD})/securityContext'
+    op: [remove]
+
+  - id: R-SC-007
+    description: Удалён capabilities.drop (контейнер сохраняет все capabilities по умолчанию)
+    category: security_weakening
+    kinds: [WORKLOAD]
+    path: '{CTR}/securityContext/capabilities/drop(?:/\d+)?'
+    op: [remove]
+
+  - id: R-SC-008
+    description: Добавлены capabilities (NET_ADMIN, NET_BIND_SERVICE и др.)
+    category: security_weakening
+    kinds: [WORKLOAD]
+    path: '{CTR}/securityContext/capabilities/add(?:/\d+)?'
+    op: [add, replace]
+    where: [{field: new, is_empty: false}]
+
+  - id: R-SC-009
+    description: Удалён seccompProfile
+    category: security_weakening
+    kinds: [WORKLOAD]
+    path: '(?:{CTR}|{POD})/securityContext/seccompProfile'
+    op: [remove]
+
+  - id: R-SA-001
+    description: Изменён serviceAccountName (смена на default или SA другого приложения)
+    category: security_weakening
+    kinds: [WORKLOAD]
+    path: '{POD}/serviceAccountName'
+
+  - id: R-SA-002
+    description: automountServiceAccountToken включён (или снято отключение)
+    category: security_weakening
+    kinds: [WORKLOAD, ServiceAccount]
+    path: '(?:{POD})?/automountServiceAccountToken'
+    op: [add, replace]
+    where: [{field: new, eq: true}]
+
+  - id: R-SA-003
+    description: Удалено automountServiceAccountToken:false
+    category: security_weakening
+    kinds: [WORKLOAD, ServiceAccount]
+    path: '(?:{POD})?/automountServiceAccountToken'
+    op: [remove]
+    where: [{field: old, eq: false}]
+
+  - id: R-HOST-005
+    description: hostPort открывает порт на узле
+    category: security_weakening
+    kinds: [WORKLOAD]
+    path: '{CTR}/ports/\d+/hostPort'
+    op: [add, replace]
+
+  - id: R-HOST-006
+    description: Монтирование (нечувствительного) пути хоста через hostPath
+    category: security_weakening
+    kinds: [WORKLOAD]
+    path: '{POD}/volumes/\d+/hostPath(?:/path)?'
+    op: [add, replace]
+
+  - id: R-HOST-007
+    description: Добавлен том hostPath
+    category: security_weakening
+    kinds: [WORKLOAD]
+    path: '{POD}/volumes/\d+'
+    op: [add, replace]
+    where: [{field: new.hostPath, is_null: false}]
+
+  - id: R-HOST-008
+    description: Общее пространство процессов пода (shareProcessNamespace)
+    category: security_weakening
+    kinds: [WORKLOAD]
+    path: '{POD}/shareProcessNamespace'
+    op: [add, replace]
+    where: [{field: new, eq: true}]
+
+  - id: R-ING-001
+    description: Отключено принудительное перенаправление на HTTPS у Ingress
+    category: security_weakening
+    kinds: [Ingress]
+    path: '/metadata/annotations/nginx\.ingress\.kubernetes\.io~1(?:force-)?ssl-redirect'
+    op: [add, replace]
+    where: [{field: new, in: ['false', false]}]
+
+  - id: R-ING-002
+    description: Удалена или изменена аутентификация / ограничение источников Ingress
+    category: security_weakening
+    kinds: [Ingress]
+    path: '/metadata/annotations/nginx\.ingress\.kubernetes\.io~1(?:auth-.*|whitelist-source-range|allowlist-source-range)'
+    op: [remove, replace]
+
+  - id: R-ING-003
+    description: Удалён или изменён TLS у Ingress
+    category: security_weakening
+    kinds: [Ingress]
+    path: '/spec/tls(?:/.*)?'
+    op: [remove, replace]
+
+  - id: R-SEC-001
+    description: Изменено значение Secret (учётные данные расходятся с Git)
+    category: security_weakening
+    kinds: [Secret]
+    path: '/(?:data|stringData)(?:/[^/]+)?'
+
+  - id: R-SEC-002
+    description: Изменена ссылка на Secret (env/envFrom/volume)
+    category: security_weakening
+    kinds: [WORKLOAD]
+    path: '(?:{CTR}/env/\d+/valueFrom/secretKeyRef(?:/.*)?|{CTR}/envFrom/\d+/secretRef(?:/.*)?|{POD}/volumes/\d+/secret(?:/.*)?)'
+
+  - id: R-NET-004
+    description: Добавлено разрешающее правило NetworkPolicy (расширение доступа)
+    category: security_weakening
+    kinds: [NetworkPolicy]
+    path: '/spec/(?:ingress|egress)(?:/\d+(?:/.*)?)?'
+    op: [add]
+
+  - id: R-RBAC-006
+    description: Расширение прав RBAC (добавлено правило/глагол)
+    category: security_weakening
+    kinds: [RBAC_ROLE]
+    path: '/rules/\d+(?:/verbs/\d+)?'
+    op: [add]
+
+  - id: R-RBAC-007
+    description: Изменён roleRef привязки RBAC
+    category: security_weakening
+    kinds: [RBAC_BINDING]
+    path: '/roleRef(?:/.*)?'
+
+  - id: R-SVC-002
+    description: Сервис опубликован наружу (NodePort/LoadBalancer)
+    category: security_weakening
+    kinds: [Service]
+    path: '/spec/type'
+    op: [add, replace]
+    where: [{field: new, in: [NodePort, LoadBalancer]}]
+
+  # ============================================================ availability
+  - id: R-AVL-001
+    description: replicas = 0 - сервис остановлен
+    category: availability
+    kinds: [WORKLOAD]
+    path: '/spec/replicas'
+    where: [{field: new, eq: 0}]
+
+  - id: R-AVL-002
+    description: Изменён selector Service - поды могут не находиться
+    category: availability
+    kinds: [Service]
+    path: '/spec/selector(?:/.*)?'
+
+  - id: R-AVL-003
+    description: Изменён port/targetPort Service
+    category: availability
+    kinds: [Service]
+    path: '/spec/ports(?:/\d+(?:/(?:port|targetPort|protocol|name))?)?'
+    op: [replace, remove]
+
+  - id: R-AVL-004
+    description: Изменён host/path/pathType/backend Ingress - трафик может не дойти
+    category: availability
+    kinds: [Ingress]
+    path: '/spec/rules/\d+/(?:host|http/paths/\d+/(?:path|pathType|backend(?:/.*)?))'
+    op: [replace, remove]
+
+  - id: R-AVL-005
+    description: Удалено правило Ingress
+    category: availability
+    kinds: [Ingress]
+    path: '/spec/rules/\d+'
+    op: [remove]
+
+  - id: R-AVL-006
+    description: Удалена probe (readiness/liveness/startup)
+    category: availability
+    kinds: [WORKLOAD]
+    path: '{PROBE}(?:/.*)?'
+    op: [remove]
+
+  - id: R-AVL-007
+    description: Изменён порт/путь/команда probe
+    category: availability
+    kinds: [WORKLOAD]
+    path: '{PROBE}/(?:httpGet|tcpSocket|exec|grpc)(?:/.*)?'
+    op: [replace, add]
+
+  - id: R-AVL-008
+    description: Лимит ресурсов уменьшен вдвое и более - риск OOM/троттлинга
+    category: availability
+    kinds: [WORKLOAD]
+    path: '{CTR}/resources/limits/[^/]+'
+    op: [replace]
+    where: [{field: new, qty_ratio_le: 0.5}]
+
+  - id: R-AVL-009
+    description: imagePullPolicy Never
+    category: availability
+    kinds: [WORKLOAD]
+    path: '{CTR}/imagePullPolicy'
+    op: [add, replace]
+    where: [{field: new, eq: Never}]
+
+  - id: R-AVL-010
+    description: Тег образа latest (при перезапуске может подтянуться другая версия)
+    category: availability
+    kinds: [WORKLOAD]
+    path: '{CTR}/image'
+    op: [add, replace]
+    where: [{field: new_image.tag, eq: latest}]
+
+  - id: R-AVL-011
+    description: Стратегия выкатки без доступных реплик (Recreate / maxUnavailable 100%)
+    category: availability
+    kinds: [Deployment, StatefulSet, DaemonSet]
+    path: '/spec/(?:strategy|updateStrategy)/(?:type|rollingUpdate/maxUnavailable)'
+    op: [add, replace]
+    where: [{field: new, in: [Recreate, '100%']}]
+
+  - id: R-AVL-012
+    description: HPA ограничен одной репликой
+    category: availability
+    kinds: [HorizontalPodAutoscaler]
+    path: '/spec/maxReplicas'
+    op: [add, replace]
+    where: [{field: new, le: 1}]
+
+  - id: R-AVL-013
+    description: Удалено или изменено правило RBAC, нужное приложению
+    category: availability
+    kinds: [RBAC_ROLE]
+    path: '/rules/\d+(?:/(?:verbs|resources|apiGroups)(?:/\d+)?)?'
+    op: [remove, replace]
+
+  - id: R-AVL-014
+    description: Удалено разрешающее правило NetworkPolicy, нужное приложению
+    category: availability
+    kinds: [NetworkPolicy]
+    path: '/spec/(?:ingress|egress)(?:/\d+(?:/.*)?)?'
+    op: [remove]
+
+  - id: R-AVL-015
+    description: Удалена переменная окружения контейнера
+    category: availability
+    kinds: [WORKLOAD]
+    path: '{CTR}/env(?:From)?/\d+'
+    op: [remove]
+
+  - id: R-AVL-016
+    description: Изменено значение переменной окружения, влияющее на запуск (порт/адрес/путь/библиотека)
+    category: availability
+    kinds: [WORKLOAD]
+    path: '{CTR}/env/\d+/value'
+    op: [replace]
+    where:
+      - {field: desired_parent.name, regex: '(?i)(?:port|host|addr|url|uri|endpoint|path|dir|lib|ld_|java_opts|command|server)'}
+
+  - id: R-AVL-017
+    description: Изменена команда запуска или порт контейнера
+    category: availability
+    kinds: [WORKLOAD]
+    path: '{CTR}/(?:command|args)(?:/.*)?|{CTR}/ports/\d+/containerPort'
+    op: [remove, replace]
+
+  - id: R-AVL-018
+    description: Удалён ключ ConfigMap
+    category: availability
+    kinds: [ConfigMap]
+    path: '/data(?:/[^/]+)?'
+    op: [remove]
+
+  - id: R-AVL-019
+    description: Изменено значение ConfigMap, влияющее на запуск (порт/адрес/путь)
+    category: availability
+    kinds: [ConfigMap]
+    path: '/data/[^/]+'
+    op: [replace]
+    where:
+      - {field: key, regex: '(?i)(?:port|host|addr|url|uri|endpoint|path|dir|lib|server|listen)'}
+
+  - id: R-AVL-020
+    description: CronJob/Job приостановлен
+    category: availability
+    kinds: [CronJob, Job]
+    path: '/spec/suspend'
+    op: [add, replace]
+    where: [{field: new, eq: true}]
+
+  # ================================================================= behavior
+  - id: R-BEH-001
+    description: Изменено число реплик
+    category: behavior
+    kinds: [WORKLOAD]
+    path: '/spec/replicas'
+
+  - id: R-BEH-002
+    description: Изменены ресурсы контейнера (requests/limits)
+    category: behavior
+    kinds: [WORKLOAD]
+    path: '{CTR}/resources(?:/.*)?'
+
+  - id: R-BEH-003
+    description: Изменён образ контейнера (тег, digest, репозиторий)
+    category: behavior
+    kinds: [WORKLOAD]
+    path: '{CTR}/image'
+
+  - id: R-BEH-004
+    description: Изменена imagePullPolicy
+    category: behavior
+    kinds: [WORKLOAD]
+    path: '{CTR}/imagePullPolicy'
+
+  - id: R-BEH-005
+    description: Изменено планирование пода (nodeSelector/tolerations/affinity/приоритет)
+    category: behavior
+    kinds: [WORKLOAD]
+    path: '{POD}/(?:nodeSelector|tolerations|affinity|topologySpreadConstraints|priorityClassName|terminationGracePeriodSeconds|restartPolicy|dnsPolicy|schedulerName)(?:/.*)?'
+
+  - id: R-BEH-006
+    description: Изменены переменные окружения контейнера (не критичные)
+    category: behavior
+    kinds: [WORKLOAD]
+    path: '{CTR}/env(?:From)?(?:/.*)?'
+
+  - id: R-BEH-007
+    description: Изменена стратегия выкатки
+    category: behavior
+    kinds: [WORKLOAD]
+    path: '/spec/(?:strategy|updateStrategy|minReadySeconds|revisionHistoryLimit|progressDeadlineSeconds)(?:/.*)?'
+
+  - id: R-BEH-008
+    description: Изменены параметры PodDisruptionBudget
+    category: behavior
+    kinds: [PodDisruptionBudget]
+    path: '/spec(?:/.*)?'
+
+  - id: R-BEH-009
+    description: Изменены параметры HPA
+    category: behavior
+    kinds: [HorizontalPodAutoscaler]
+    path: '/spec(?:/.*)?'
+
+  - id: R-BEH-010
+    description: Усиление или иное изменение securityContext (поведение меняется, угрозы нет)
+    category: behavior
+    kinds: [WORKLOAD]
+    path: '(?:{CTR}|{POD})/securityContext(?:/.*)?'
+
+  - id: R-BEH-011
+    description: Изменено значение ConfigMap (конфигурация приложения)
+    category: behavior
+    kinds: [ConfigMap]
+    path: '/(?:data|binaryData)(?:/[^/]+)?'
+
+  - id: R-BEH-012
+    description: Аннотация, меняющая поведение инфраструктуры (ingress-контроллер, sidecar, checksum)
+    category: behavior
+    path: '(?:/metadata|{TPLMETA})/annotations/(?:nginx\.ingress\.kubernetes\.io~1.*|sidecar\.istio\.io~1.*|linkerd\.io~1.*|checksum~1.*|traefik.*|cert-manager\.io~1.*)'
+
+  - id: R-BEH-013
+    description: Добавлено или изменено правило Ingress / ingressClassName
+    category: behavior
+    kinds: [Ingress]
+    path: '/spec/(?:rules(?:/.*)?|ingressClassName|defaultBackend(?:/.*)?)'
+
+  - id: R-BEH-014
+    description: Изменена метка, влияющая на выбор подов (labels шаблона, name/instance)
+    category: behavior
+    path: '(?:{TPLMETA}/labels/.*|/metadata/labels/app\.kubernetes\.io~1(?:name|instance|component))'
+    where:
+      - {field: key, not_regex: '^(?:helm\.sh/chart|app\.kubernetes\.io/version|chart|version)$'}
+
+  - id: R-BEH-015
+    description: Изменено расписание или параметры Job/CronJob
+    category: behavior
+    kinds: [CronJob, Job]
+    path: '/spec(?:/.*)?'
+
+  - id: R-BEH-016
+    description: Изменены тома или монтирования
+    category: behavior
+    kinds: [WORKLOAD]
+    path: '(?:{POD}/volumes|{CTR}/volumeMounts)(?:/.*)?'
+
+  - id: R-BEH-017
+    description: Изменён тип Service / вспомогательные параметры Service
+    category: behavior
+    kinds: [Service]
+    path: '/spec(?:/.*)?'
+
+  - id: R-BEH-018
+    description: Изменён ServiceAccount (secrets/imagePullSecrets)
+    category: behavior
+    kinds: [ServiceAccount]
+    path: '/(?:secrets|imagePullSecrets)(?:/.*)?'
+
+  # ================================================================== cosmetic
+  - id: R-COS-001
+    description: Информационные метки и аннотации ресурса
+    category: cosmetic
+    path: '/metadata/(?:labels|annotations)(?:/[^/]*)?'
+
+  - id: R-COS-002
+    description: Информационные метки/аннотации шаблона пода
+    category: cosmetic
+    path: '{TPLMETA}/(?:labels|annotations)(?:/[^/]*)?'
+    where:
+      - {field: key, regex: '(?i)^(?:prometheus\.io/|fluentbit\.io/|backup\.velero\.io/|owner|build|pipeline|ci\.|deployment\.|env-ticket|helm\.sh/chart|app\.kubernetes\.io/version|chart|version|team|contact|description)'}

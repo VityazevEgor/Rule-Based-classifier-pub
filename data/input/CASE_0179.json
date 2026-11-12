@@ -1,0 +1,34 @@
+{
+ "case_id": "CASE_0179",
+ "desired": {
+  "apiVersion": "v1",
+  "automountServiceAccountToken": false,
+  "kind": "ServiceAccount",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/component": "metrics",
+    "app.kubernetes.io/instance": "prometheus-node-exporter-dev",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "prometheus-node-exporter",
+    "app.kubernetes.io/part-of": "prometheus-node-exporter",
+    "app.kubernetes.io/version": "1.12.1",
+    "environment": "dev",
+    "helm.sh/chart": "prometheus-node-exporter-4.60.0"
+   },
+   "name": "prometheus-node-exporter-dev",
+   "namespace": "prometheus-node-exporter-dev"
+  }
+ },
+ "diff": [
+  {
+   "new": "team-alpha",
+   "old": null,
+   "op": "add",
+   "path": "/metadata/labels/owner"
+  }
+ ],
+ "environment": "dev",
+ "namespace": "prometheus-node-exporter-dev",
+ "resource_kind": "ServiceAccount",
+ "resource_name": "prometheus-node-exporter-dev"
+}

@@ -1,0 +1,65 @@
+{
+ "case_id": "CASE_0011",
+ "desired": {
+  "apiVersion": "networking.k8s.io/v1",
+  "kind": "NetworkPolicy",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/instance": "redis-prod",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "redis",
+    "app.kubernetes.io/version": "8.10.2",
+    "environment": "prod",
+    "helm.sh/chart": "redis-28.3.1"
+   },
+   "name": "redis-prod",
+   "namespace": "redis-prod"
+  },
+  "spec": {
+   "egress": [
+    {}
+   ],
+   "ingress": [
+    {
+     "ports": [
+      {
+       "port": 6379
+      }
+     ]
+    }
+   ],
+   "podSelector": {
+    "matchLabels": {
+     "app.kubernetes.io/instance": "redis-prod",
+     "app.kubernetes.io/name": "redis"
+    }
+   },
+   "policyTypes": [
+    "Ingress",
+    "Egress"
+   ]
+  }
+ },
+ "diff": [
+  {
+   "new": "8.10.3",
+   "old": "8.10.2",
+   "op": "replace",
+   "path": "/metadata/labels/app.kubernetes.io~1version"
+  },
+  {
+   "new": null,
+   "old": [
+    {
+     "port": 6379
+    }
+   ],
+   "op": "remove",
+   "path": "/spec/ingress/0/ports"
+  }
+ ],
+ "environment": "prod",
+ "namespace": "redis-prod",
+ "resource_kind": "NetworkPolicy",
+ "resource_name": "redis-prod"
+}

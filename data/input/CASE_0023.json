@@ -1,0 +1,41 @@
+{
+ "case_id": "CASE_0023",
+ "desired": {
+  "apiVersion": "v1",
+  "data": {
+   "override.conf": "max_connections = 100"
+  },
+  "kind": "ConfigMap",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/component": "primary",
+    "app.kubernetes.io/instance": "postgresql-dev",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "postgresql",
+    "app.kubernetes.io/version": "18.6.0",
+    "environment": "dev",
+    "helm.sh/chart": "postgresql-18.12.14"
+   },
+   "name": "postgresql-dev-extended-configuration",
+   "namespace": "postgresql-dev"
+  }
+ },
+ "diff": [
+  {
+   "new": "postgresql-18.12.15",
+   "old": "postgresql-18.12.14",
+   "op": "replace",
+   "path": "/metadata/labels/helm.sh~1chart"
+  },
+  {
+   "new": "internal",
+   "old": "max_connections = 100",
+   "op": "replace",
+   "path": "/data/override.conf"
+  }
+ ],
+ "environment": "dev",
+ "namespace": "postgresql-dev",
+ "resource_kind": "ConfigMap",
+ "resource_name": "postgresql-dev-extended-configuration"
+}

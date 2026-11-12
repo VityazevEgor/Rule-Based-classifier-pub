@@ -1,0 +1,60 @@
+{
+ "case_id": "CASE_0211",
+ "desired": {
+  "apiVersion": "autoscaling/v2",
+  "kind": "HorizontalPodAutoscaler",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/instance": "nginx-dev",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "nginx",
+    "app.kubernetes.io/version": "1.31.7",
+    "environment": "dev",
+    "helm.sh/chart": "nginx-25.2.5"
+   },
+   "name": "nginx-dev",
+   "namespace": "nginx-dev"
+  },
+  "spec": {
+   "maxReplicas": 3,
+   "metrics": [
+    {
+     "resource": {
+      "name": "cpu",
+      "target": {
+       "averageUtilization": 80,
+       "type": "Utilization"
+      }
+     },
+     "type": "Resource"
+    }
+   ],
+   "minReplicas": 1,
+   "scaleTargetRef": {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "name": "nginx-dev"
+   }
+  }
+ },
+ "diff": [
+  {
+   "new": {
+    "backup.velero.io/backup-volumes": "data"
+   },
+   "old": null,
+   "op": "add",
+   "path": "/metadata/annotations"
+  },
+  {
+   "new": 95,
+   "old": 80,
+   "op": "replace",
+   "path": "/spec/metrics/0/resource/target/averageUtilization"
+  }
+ ],
+ "environment": "dev",
+ "namespace": "nginx-dev",
+ "resource_kind": "HorizontalPodAutoscaler",
+ "resource_name": "nginx-dev"
+}

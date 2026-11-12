@@ -1,0 +1,49 @@
+{
+ "case_id": "CASE_0019",
+ "desired": {
+  "apiVersion": "v1",
+  "kind": "Service",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/component": "replica",
+    "app.kubernetes.io/instance": "redis-dev",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "redis",
+    "app.kubernetes.io/version": "8.10.2",
+    "environment": "dev",
+    "helm.sh/chart": "redis-28.3.1"
+   },
+   "name": "redis-dev-replicas",
+   "namespace": "redis-dev"
+  },
+  "spec": {
+   "internalTrafficPolicy": "Cluster",
+   "ports": [
+    {
+     "name": "tcp-redis",
+     "nodePort": null,
+     "port": 6379,
+     "targetPort": "redis"
+    }
+   ],
+   "selector": {
+    "app.kubernetes.io/component": "replica",
+    "app.kubernetes.io/instance": "redis-dev",
+    "app.kubernetes.io/name": "redis"
+   },
+   "type": "ClusterIP"
+  }
+ },
+ "diff": [
+  {
+   "new": "NodePort",
+   "old": "ClusterIP",
+   "op": "replace",
+   "path": "/spec/type"
+  }
+ ],
+ "environment": "dev",
+ "namespace": "redis-dev",
+ "resource_kind": "Service",
+ "resource_name": "redis-dev-replicas"
+}

@@ -1,0 +1,71 @@
+case_id,label,matched_rules,fallback_ops,explanation
+CASE_0001,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/labels/helm.sh~1chart]
+CASE_0006,2,R-BEH-008,0,R-BEH-008: Изменены параметры PodDisruptionBudget [/spec/minAvailable]
+CASE_0010,3,R-HOST-005,0,R-HOST-005: hostPort открывает порт на узле [/spec/template/spec/containers/0/ports/0/hostPort]
+CASE_0027,2,R-BEH-012,0,"R-BEH-012: Аннотация, меняющая поведение инфраструктуры (ingress-контроллер, sidecar, checksum) [/metadata/annotations/nginx.ingress.kubernetes.io~1proxy-body-size]"
+CASE_0028,2,R-BEH-008,0,R-BEH-008: Изменены параметры PodDisruptionBudget [/spec/minAvailable]
+CASE_0037,2,R-BEH-013,0,R-BEH-013: Добавлено или изменено правило Ingress / ingressClassName [/spec/rules/1]
+CASE_0039,2,R-BEH-008;R-COS-001,0,R-BEH-008: Изменены параметры PodDisruptionBudget [/spec/minAvailable]
+CASE_0041,3,R-SC-008,0,"R-SC-008: Добавлены capabilities (NET_ADMIN, NET_BIND_SERVICE и др.) [/spec/template/spec/containers/0/securityContext/capabilities/add]"
+CASE_0044,2,R-BEH-008,0,R-BEH-008: Изменены параметры PodDisruptionBudget [/spec/maxUnavailable]
+CASE_0048,2,R-BEH-013;R-COS-001,0,R-BEH-013: Добавлено или изменено правило Ingress / ingressClassName [/spec/rules/1]
+CASE_0052,2,R-AVL-003,0,R-AVL-003: Изменён port/targetPort Service [/spec/ports/0/port]
+CASE_0055,2,R-BEH-005,0,R-BEH-005: Изменено планирование пода (nodeSelector/tolerations/affinity/приоритет) [/spec/template/spec/tolerations/1]
+CASE_0060,2,R-BEH-012,0,"R-BEH-012: Аннотация, меняющая поведение инфраструктуры (ingress-контроллер, sidecar, checksum) [/metadata/annotations/nginx.ingress.kubernetes.io~1whitelist-source-range]"
+CASE_0069,3,R-AVL-003,0,R-AVL-003: Изменён port/targetPort Service [/spec/ports/0/port]
+CASE_0070,3,R-COS-001;R-SEC-001,0,R-SEC-001: Изменено значение Secret (учётные данные расходятся с Git) [/data/postgres-password]
+CASE_0072,4,R-RBAC-002,0,"R-RBAC-002: Доступ RBAC к secrets, pods/exec и аналогам [/rules/10/resources]"
+CASE_0077,4,R-RBAC-002,0,"R-RBAC-002: Доступ RBAC к secrets, pods/exec и аналогам [/rules/10/resources]"
+CASE_0081,2,R-BEH-003,0,"R-BEH-003: Изменён образ контейнера (тег, digest, репозиторий) [/spec/template/spec/containers/0/image]"
+CASE_0082,4,R-AVL-006;R-BEH-010;R-CRED-003,0,R-CRED-003: Учётные данные открытым текстом в переменной окружения контейнера [/spec/template/spec/containers/0/env/1]
+CASE_0084,4,R-HOST-002,0,R-HOST-002: Общие пространства имён хоста (hostPID/hostNetwork/hostIPC true) [/spec/template/spec/hostPID]
+CASE_0095,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/annotations]
+CASE_0098,2,R-BEH-001,0,R-BEH-001: Изменено число реплик [/spec/replicas]
+CASE_0100,3,R-SC-006,0,R-SC-006: Удалён блок securityContext [/spec/template/spec/containers/0/securityContext]
+CASE_0110,3,R-COS-001;R-SEC-001,0,R-SEC-001: Изменено значение Secret (учётные данные расходятся с Git) [/data/tls.key]
+CASE_0118,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/annotations]
+CASE_0120,2,R-BEH-008,0,R-BEH-008: Изменены параметры PodDisruptionBudget [/spec/maxUnavailable]
+CASE_0121,2,R-BEH-012,0,"R-BEH-012: Аннотация, меняющая поведение инфраструктуры (ingress-контроллер, sidecar, checksum) [/metadata/annotations/nginx.ingress.kubernetes.io~1proxy-body-size]"
+CASE_0127,2,R-BEH-001,0,R-BEH-001: Изменено число реплик [/spec/replicas]
+CASE_0130,2,R-BEH-011,0,R-BEH-011: Изменено значение ConfigMap (конфигурация приложения) [/data]
+CASE_0133,3,R-SC-006,0,R-SC-006: Удалён блок securityContext [/spec/jobTemplate/spec/template/spec/containers/0/securityContext]
+CASE_0138,2,R-BEH-002,0,R-BEH-002: Изменены ресурсы контейнера (requests/limits) [/spec/template/spec/containers/0/resources/requests/cpu]
+CASE_0141,2,R-BEH-008;R-COS-001,0,R-BEH-008: Изменены параметры PodDisruptionBudget [/spec/minAvailable]
+CASE_0143,3,R-COS-001;R-NET-004,0,R-NET-004: Добавлено разрешающее правило NetworkPolicy (расширение доступа) [/spec/ingress/1]
+CASE_0158,4,R-COS-001;R-CRED-001,0,R-CRED-001: Учётные данные открытым текстом в ConfigMap (ключ) [/data/aws_secret_access_key]
+CASE_0159,2,R-BEH-003,0,"R-BEH-003: Изменён образ контейнера (тег, digest, репозиторий) [/spec/template/spec/containers/0/image]"
+CASE_0163,3,R-AVL-002;R-COS-001,0,R-AVL-002: Изменён selector Service - поды могут не находиться [/spec/selector/app.kubernetes.io~1instance]
+CASE_0165,4,R-CRED-003,0,R-CRED-003: Учётные данные открытым текстом в переменной окружения контейнера [/spec/template/spec/containers/0/env/5]
+CASE_0171,4,R-RBAC-002,0,"R-RBAC-002: Доступ RBAC к secrets, pods/exec и аналогам [/rules/9/resources]"
+CASE_0175,4,R-COS-001;R-SVC-001,0,"R-SVC-001: Внутренний сервис (СУБД, кэш, брокер, служебный компонент) выведен наружу (NodePort/LoadBalancer) [/spec/type]"
+CASE_0187,4,R-HOST-001;R-SC-001,0,R-HOST-001: Привилегированный контейнер (privileged true) - выход за пределы изоляции [/spec/template/spec/containers/0/securityContext/privileged]
+CASE_0196,2,R-BEH-007,0,R-BEH-007: Изменена стратегия выкатки [/spec/strategy/rollingUpdate]
+CASE_0200,3,R-SC-006,0,R-SC-006: Удалён блок securityContext [/spec/template/spec/containers/0/securityContext]
+CASE_0206,3,R-AVL-006,0,R-AVL-006: Удалена probe (readiness/liveness/startup) [/spec/template/spec/containers/0/startupProbe]
+CASE_0209,2,R-BEH-001,0,R-BEH-001: Изменено число реплик [/spec/replicas]
+CASE_0212,2,R-BEH-005,0,R-BEH-005: Изменено планирование пода (nodeSelector/tolerations/affinity/приоритет) [/spec/template/spec/tolerations]
+CASE_0217,3,R-AVL-001,0,R-AVL-001: replicas = 0 - сервис остановлен [/spec/replicas]
+CASE_0222,3,R-SC-008,0,"R-SC-008: Добавлены capabilities (NET_ADMIN, NET_BIND_SERVICE и др.) [/spec/template/spec/containers/0/securityContext/capabilities/add]"
+CASE_0228,3,R-COS-001;R-SEC-001,0,R-SEC-001: Изменено значение Secret (учётные данные расходятся с Git) [/data/postgres-password]
+CASE_0238,2,R-BEH-010,0,"R-BEH-010: Усиление или иное изменение securityContext (поведение меняется, угрозы нет) [/spec/template/spec/containers/0/securityContext/runAsUser]"
+CASE_0239,3,R-BEH-016;R-HOST-007,0,R-HOST-007: Добавлен том hostPath [/spec/template/spec/volumes/3]
+CASE_0244,3,R-AVL-004,0,R-AVL-004: Изменён host/path/pathType/backend Ingress - трафик может не дойти [/spec/rules/0/http/paths/0/pathType]
+CASE_0245,2,R-BEH-002,0,R-BEH-002: Изменены ресурсы контейнера (requests/limits) [/spec/template/spec/containers/0/resources/requests/cpu]
+CASE_0247,2,R-BEH-011,0,R-BEH-011: Изменено значение ConfigMap (конфигурация приложения) [/data]
+CASE_0254,2,R-BEH-013,0,R-BEH-013: Добавлено или изменено правило Ingress / ingressClassName [/spec/rules/1]
+CASE_0258,2,R-BEH-006,0,R-BEH-006: Изменены переменные окружения контейнера (не критичные) [/spec/template/spec/containers/0/env/8]
+CASE_0265,2,R-BEH-012,0,"R-BEH-012: Аннотация, меняющая поведение инфраструктуры (ingress-контроллер, sidecar, checksum) [/metadata/annotations/nginx.ingress.kubernetes.io~1whitelist-source-range]"
+CASE_0266,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/labels/helm.sh~1chart]
+CASE_0277,2,R-BEH-007,0,R-BEH-007: Изменена стратегия выкатки [/spec/strategy/rollingUpdate]
+CASE_0280,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/annotations]
+CASE_0284,2,R-AVL-010,0,R-AVL-010: Тег образа latest (при перезапуске может подтянуться другая версия) [/spec/template/spec/containers/0/image]
+CASE_0295,2,R-AVL-001,0,R-AVL-001: replicas = 0 - сервис остановлен [/spec/replicas]
+CASE_0296,2,R-BEH-005,0,R-BEH-005: Изменено планирование пода (nodeSelector/tolerations/affinity/приоритет) [/spec/template/spec/nodeSelector]
+CASE_0298,4,R-CRED-003,0,R-CRED-003: Учётные данные открытым текстом в переменной окружения контейнера [/spec/template/spec/containers/0/env/19]
+CASE_0308,2,R-BEH-001,0,R-BEH-001: Изменено число реплик [/spec/replicas]
+CASE_0311,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/annotations]
+CASE_0314,2,R-AVL-011;R-BEH-007,0,R-BEH-007: Изменена стратегия выкатки [/spec/strategy/rollingUpdate]
+CASE_0318,2,R-BEH-002,0,R-BEH-002: Изменены ресурсы контейнера (requests/limits) [/spec/template/spec/containers/0/resources/requests/cpu]
+CASE_0320,3,R-SA-001,0,R-SA-001: Изменён serviceAccountName (смена на default или SA другого приложения) [/spec/template/spec/serviceAccountName]
+CASE_0322,2,R-AVL-006;R-BEH-002,0,R-AVL-006: Удалена probe (readiness/liveness/startup) [/spec/template/spec/containers/0/livenessProbe]
+CASE_0324,2,R-BEH-007,0,R-BEH-007: Изменена стратегия выкатки [/spec/strategy]

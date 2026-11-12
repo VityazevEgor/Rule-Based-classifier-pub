@@ -1,0 +1,129 @@
+{
+  "n": 70,
+  "accuracy": 1.0,
+  "macro_f1": 1.0,
+  "per_class": {
+    "1": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 6
+    },
+    "2": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 37
+    },
+    "3": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 17
+    },
+    "4": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 10
+    }
+  },
+  "confusion": [
+    [
+      6,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      37,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      17,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      10
+    ]
+  ],
+  "kappa": 1.0,
+  "kappa_linear": 1.0,
+  "under_rate": 0.0,
+  "over_rate": 0.0,
+  "recall_class4": 1.0,
+  "ci95": {
+    "accuracy": [
+      1.0,
+      1.0
+    ],
+    "macro_f1": [
+      1.0,
+      1.0
+    ],
+    "kappa_linear": [
+      1.0,
+      1.0
+    ]
+  },
+  "slices": {
+    "operator_split": {
+      "seen": {
+        "n": 70,
+        "accuracy": 1.0,
+        "macro_f1": 1.0
+      }
+    },
+    "case_type": {
+      "compound": {
+        "n": 12,
+        "accuracy": 1.0,
+        "macro_f1": 1.0
+      },
+      "paired": {
+        "n": 20,
+        "accuracy": 1.0,
+        "macro_f1": 1.0
+      },
+      "single": {
+        "n": 38,
+        "accuracy": 1.0,
+        "macro_f1": 1.0
+      }
+    },
+    "environment": {
+      "dev": {
+        "n": 33,
+        "accuracy": 1.0,
+        "macro_f1": 1.0
+      },
+      "prod": {
+        "n": 37,
+        "accuracy": 1.0,
+        "macro_f1": 1.0
+      }
+    }
+  },
+  "pair_consistency": {
+    "n_pairs": 10,
+    "consistent": 10,
+    "rate": 1.0
+  },
+  "vs_expert2": {
+    "n": 7,
+    "kappa_clf_vs_expert2": 1.0,
+    "kappa_expert1_vs_expert2": 1.0,
+    "kappa_clf_vs_expert1": 1.0
+  },
+  "fallback_case_rate": 0.0,
+  "fallback_op_rate": 0.0,
+  "n_ops": 91,
+  "rules_sha256": "51a7b50266942dec214a083e72e406b032de1e975eb60cab66d134bdc70776ae"
+}

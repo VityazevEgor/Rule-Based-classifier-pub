@@ -1,0 +1,91 @@
+{
+ "case_id": "CASE_0292",
+ "desired": {
+  "apiVersion": "networking.k8s.io/v1",
+  "kind": "NetworkPolicy",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/instance": "rabbitmq-dev",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "rabbitmq",
+    "app.kubernetes.io/version": "4.1.3",
+    "environment": "dev",
+    "helm.sh/chart": "rabbitmq-16.0.14"
+   },
+   "name": "rabbitmq-dev",
+   "namespace": "rabbitmq-dev"
+  },
+  "spec": {
+   "egress": [
+    {}
+   ],
+   "ingress": [
+    {
+     "ports": [
+      {
+       "port": 4369
+      },
+      {
+       "port": 5672
+      },
+      {
+       "port": 5671
+      },
+      {
+       "port": 25672
+      },
+      {
+       "port": 15672
+      }
+     ]
+    }
+   ],
+   "podSelector": {
+    "matchLabels": {
+     "app.kubernetes.io/instance": "rabbitmq-dev",
+     "app.kubernetes.io/name": "rabbitmq"
+    }
+   },
+   "policyTypes": [
+    "Ingress",
+    "Egress"
+   ]
+  }
+ },
+ "diff": [
+  {
+   "new": "team-platform",
+   "old": null,
+   "op": "add",
+   "path": "/metadata/labels/owner"
+  },
+  {
+   "new": null,
+   "old": {
+    "ports": [
+     {
+      "port": 4369
+     },
+     {
+      "port": 5672
+     },
+     {
+      "port": 5671
+     },
+     {
+      "port": 25672
+     },
+     {
+      "port": 15672
+     }
+    ]
+   },
+   "op": "remove",
+   "path": "/spec/ingress/0"
+  }
+ ],
+ "environment": "dev",
+ "namespace": "rabbitmq-dev",
+ "resource_kind": "NetworkPolicy",
+ "resource_name": "rabbitmq-dev"
+}

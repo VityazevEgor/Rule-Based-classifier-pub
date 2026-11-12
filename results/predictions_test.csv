@@ -1,0 +1,253 @@
+case_id,label,matched_rules,fallback_ops,explanation
+CASE_0002,4,R-HOST-004,0,"R-HOST-004: Опасные Linux capabilities (SYS_ADMIN, SYS_MODULE, SYS_PTRACE и аналоги) [/spec/template/spec/containers/0/securityContext/capabilities/add]"
+CASE_0003,3,R-AVL-015;R-BEH-002,0,R-AVL-015: Удалена переменная окружения контейнера [/spec/template/spec/containers/0/env/0]
+CASE_0004,4,R-CRED-003,0,R-CRED-003: Учётные данные открытым текстом в переменной окружения контейнера [/spec/template/spec/containers/0/env/10]
+CASE_0005,2,R-BEH-005,0,R-BEH-005: Изменено планирование пода (nodeSelector/tolerations/affinity/приоритет) [/spec/template/spec/nodeSelector/disktype]
+CASE_0007,3,R-COS-001;R-NET-004,0,R-NET-004: Добавлено разрешающее правило NetworkPolicy (расширение доступа) [/spec/ingress/1]
+CASE_0008,2,R-AVL-004,0,R-AVL-004: Изменён host/path/pathType/backend Ingress - трафик может не дойти [/spec/rules/0/http/paths/0/path]
+CASE_0009,3,R-AVL-011;R-BEH-007,0,R-AVL-011: Стратегия выкатки без доступных реплик (Recreate / maxUnavailable 100%) [/spec/strategy/rollingUpdate/maxUnavailable]
+CASE_0011,3,R-AVL-014;R-COS-001,0,"R-AVL-014: Удалено разрешающее правило NetworkPolicy, нужное приложению [/spec/ingress/0/ports]"
+CASE_0012,3,R-SC-003,0,R-SC-003: Запуск от root (runAsUser 0 / runAsNonRoot false) [/spec/template/spec/containers/0/securityContext/runAsNonRoot]
+CASE_0013,4,R-HOST-002,0,R-HOST-002: Общие пространства имён хоста (hostPID/hostNetwork/hostIPC true) [/spec/template/spec/hostIPC]
+CASE_0014,2,R-BEH-002,0,R-BEH-002: Изменены ресурсы контейнера (requests/limits) [/spec/template/spec/containers/0/resources]
+CASE_0015,4,R-SVC-001,0,"R-SVC-001: Внутренний сервис (СУБД, кэш, брокер, служебный компонент) выведен наружу (NodePort/LoadBalancer) [/spec/type]"
+CASE_0016,2,R-BEH-001,0,R-BEH-001: Изменено число реплик [/spec/replicas]
+CASE_0017,2,R-BEH-008,0,R-BEH-008: Изменены параметры PodDisruptionBudget [/spec/minAvailable]
+CASE_0018,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/annotations]
+CASE_0019,4,R-SVC-001,0,"R-SVC-001: Внутренний сервис (СУБД, кэш, брокер, служебный компонент) выведен наружу (NodePort/LoadBalancer) [/spec/type]"
+CASE_0020,4,R-RBAC-001,0,R-RBAC-001: Wildcard '*' в verbs или resources правила RBAC [/rules/7/resources]
+CASE_0021,3,R-ING-001,0,R-ING-001: Отключено принудительное перенаправление на HTTPS у Ingress [/metadata/annotations/nginx.ingress.kubernetes.io~1ssl-redirect]
+CASE_0023,2,R-BEH-011;R-COS-001,0,R-BEH-011: Изменено значение ConfigMap (конфигурация приложения) [/data/override.conf]
+CASE_0024,3,R-SC-008,0,"R-SC-008: Добавлены capabilities (NET_ADMIN, NET_BIND_SERVICE и др.) [/spec/template/spec/containers/0/securityContext/capabilities/add]"
+CASE_0025,3,R-AVL-014,0,"R-AVL-014: Удалено разрешающее правило NetworkPolicy, нужное приложению [/spec/ingress/0/ports]"
+CASE_0029,3,R-AVL-010;R-AVL-015;R-BEH-010,0,R-AVL-010: Тег образа latest (при перезапуске может подтянуться другая версия) [/spec/template/spec/containers/0/image]
+CASE_0030,4,R-COS-001;R-RBAC-005,0,"R-RBAC-005: Добавлен или изменён субъект привязки RBAC (в т.ч. system:authenticated, чужой ServiceAccount) [/subjects/1]"
+CASE_0031,2,R-BEH-006,0,R-BEH-006: Изменены переменные окружения контейнера (не критичные) [/spec/template/spec/containers/0/env/5]
+CASE_0032,3,R-AVL-008;R-BEH-002,0,R-AVL-008: Лимит ресурсов уменьшен вдвое и более - риск OOM/троттлинга [/spec/jobTemplate/spec/template/spec/containers/0/resources/limits/cpu]
+CASE_0033,2,,1,FALLBACK: no rule matched [/spec/template/spec/containers/0/readinessProbe/failureThreshold]
+CASE_0035,4,R-COS-001;R-RBAC-002,0,"R-RBAC-002: Доступ RBAC к secrets, pods/exec и аналогам [/rules/10/resources]"
+CASE_0036,2,R-BEH-010,0,"R-BEH-010: Усиление или иное изменение securityContext (поведение меняется, угрозы нет) [/spec/template/spec/containers/0/securityContext/capabilities]"
+CASE_0038,2,R-BEH-008;R-COS-001,0,R-BEH-008: Изменены параметры PodDisruptionBudget [/spec/minAvailable]
+CASE_0040,3,R-BEH-010;R-SA-001,0,R-SA-001: Изменён serviceAccountName (смена на default или SA другого приложения) [/spec/template/spec/serviceAccountName]
+CASE_0042,3,R-SA-001,0,R-SA-001: Изменён serviceAccountName (смена на default или SA другого приложения) [/spec/template/spec/serviceAccountName]
+CASE_0043,4,R-COS-001;R-SVC-001,0,"R-SVC-001: Внутренний сервис (СУБД, кэш, брокер, служебный компонент) выведен наружу (NodePort/LoadBalancer) [/spec/type]"
+CASE_0045,2,R-BEH-002,0,R-BEH-002: Изменены ресурсы контейнера (requests/limits) [/spec/template/spec/containers/0/resources/limits/cpu]
+CASE_0046,3,R-AVL-007,0,R-AVL-007: Изменён порт/путь/команда probe [/spec/template/spec/containers/0/livenessProbe/tcpSocket/port]
+CASE_0047,4,R-BEH-002;R-BEH-016;R-HOST-003,0,"R-HOST-003: Монтирование чувствительного пути хоста (/, /etc, /proc, /sys, docker.sock, ...) [/spec/template/spec/volumes/4/hostPath/path]"
+CASE_0049,3,R-BEH-016;R-HOST-007,0,R-HOST-007: Добавлен том hostPath [/spec/template/spec/volumes/5]
+CASE_0050,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/labels/app.kubernetes.io~1version]
+CASE_0051,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/labels/helm.sh~1chart]
+CASE_0053,3,R-ING-001,0,R-ING-001: Отключено принудительное перенаправление на HTTPS у Ingress [/metadata/annotations/nginx.ingress.kubernetes.io~1ssl-redirect]
+CASE_0054,4,R-RBAC-005,0,"R-RBAC-005: Добавлен или изменён субъект привязки RBAC (в т.ч. system:authenticated, чужой ServiceAccount) [/subjects/1]"
+CASE_0056,3,R-BEH-012;R-HOST-005,0,R-HOST-005: hostPort открывает порт на узле [/spec/template/spec/containers/0/ports/0/hostPort]
+CASE_0057,3,R-SC-001,0,R-SC-001: allowPrivilegeEscalation включён [/spec/jobTemplate/spec/template/spec/containers/0/securityContext/allowPrivilegeEscalation]
+CASE_0058,3,R-RBAC-006,0,R-RBAC-006: Расширение прав RBAC (добавлено правило/глагол) [/rules/9]
+CASE_0059,4,R-BEH-016;R-HOST-003,0,"R-HOST-003: Монтирование чувствительного пути хоста (/, /etc, /proc, /sys, docker.sock, ...) [/spec/template/spec/volumes/0/hostPath/path]"
+CASE_0061,3,R-SA-001,0,R-SA-001: Изменён serviceAccountName (смена на default или SA другого приложения) [/spec/template/spec/serviceAccountName]
+CASE_0062,3,R-AVL-015,0,R-AVL-015: Удалена переменная окружения контейнера [/spec/template/spec/containers/0/env/8]
+CASE_0063,3,R-AVL-006,0,R-AVL-006: Удалена probe (readiness/liveness/startup) [/spec/template/spec/containers/0/readinessProbe]
+CASE_0064,2,R-BEH-005,0,R-BEH-005: Изменено планирование пода (nodeSelector/tolerations/affinity/приоритет) [/spec/template/spec/nodeSelector/disktype]
+CASE_0065,3,R-AVL-008;R-BEH-002,0,R-AVL-008: Лимит ресурсов уменьшен вдвое и более - риск OOM/троттлинга [/spec/template/spec/containers/0/resources/limits/cpu]
+CASE_0066,2,R-AVL-003;R-COS-001,0,R-AVL-003: Изменён port/targetPort Service [/spec/ports/0/targetPort]
+CASE_0067,2,R-AVL-013,0,"R-AVL-013: Удалено или изменено правило RBAC, нужное приложению [/rules/1]"
+CASE_0068,2,R-BEH-001,0,R-BEH-001: Изменено число реплик [/spec/replicas]
+CASE_0071,3,R-SA-002,0,R-SA-002: automountServiceAccountToken включён (или снято отключение) [/spec/template/spec/automountServiceAccountToken]
+CASE_0073,2,R-BEH-003,0,"R-BEH-003: Изменён образ контейнера (тег, digest, репозиторий) [/spec/template/spec/containers/0/image]"
+CASE_0074,2,R-BEH-011;R-COS-001,0,R-BEH-011: Изменено значение ConfigMap (конфигурация приложения) [/data/ping_liveness_local.sh]
+CASE_0075,2,R-BEH-008;R-COS-001,0,R-BEH-008: Изменены параметры PodDisruptionBudget [/spec/maxUnavailable]
+CASE_0076,3,R-SEC-001,0,R-SEC-001: Изменено значение Secret (учётные данные расходятся с Git) [/data/postgres-password]
+CASE_0078,3,R-SA-001,0,R-SA-001: Изменён serviceAccountName (смена на default или SA другого приложения) [/spec/template/spec/serviceAccountName]
+CASE_0079,4,R-BEH-016;R-HOST-003,0,"R-HOST-003: Монтирование чувствительного пути хоста (/, /etc, /proc, /sys, docker.sock, ...) [/spec/template/spec/volumes/5/hostPath/path]"
+CASE_0080,2,R-BEH-007,0,R-BEH-007: Изменена стратегия выкатки [/spec/strategy/rollingUpdate]
+CASE_0085,2,R-AVL-009,0,R-AVL-009: imagePullPolicy Never [/spec/template/spec/containers/0/imagePullPolicy]
+CASE_0086,3,R-SC-003,0,R-SC-003: Запуск от root (runAsUser 0 / runAsNonRoot false) [/spec/template/spec/containers/0/securityContext/runAsNonRoot]
+CASE_0087,4,R-HOST-002,0,R-HOST-002: Общие пространства имён хоста (hostPID/hostNetwork/hostIPC true) [/spec/template/spec/hostIPC]
+CASE_0088,3,R-SC-008,0,"R-SC-008: Добавлены capabilities (NET_ADMIN, NET_BIND_SERVICE и др.) [/spec/jobTemplate/spec/template/spec/containers/0/securityContext/capabilities/add]"
+CASE_0089,2,R-BEH-010,0,"R-BEH-010: Усиление или иное изменение securityContext (поведение меняется, угрозы нет) [/spec/template/spec/containers/0/securityContext/runAsUser]"
+CASE_0090,2,,1,FALLBACK: no rule matched [/spec/template/spec/containers/0/readinessProbe/periodSeconds]
+CASE_0091,4,R-HOST-004,0,"R-HOST-004: Опасные Linux capabilities (SYS_ADMIN, SYS_MODULE, SYS_PTRACE и аналоги) [/spec/jobTemplate/spec/template/spec/containers/0/securityContext/capabilities/add]"
+CASE_0092,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/annotations]
+CASE_0093,2,R-BEH-011,0,R-BEH-011: Изменено значение ConfigMap (конфигурация приложения) [/data/override.conf]
+CASE_0094,2,R-AVL-001,0,R-AVL-001: replicas = 0 - сервис остановлен [/spec/replicas]
+CASE_0096,3,R-SC-005,0,R-SC-005: readOnlyRootFilesystem выключен [/spec/template/spec/containers/0/securityContext/readOnlyRootFilesystem]
+CASE_0097,2,R-AVL-004,0,R-AVL-004: Изменён host/path/pathType/backend Ingress - трафик может не дойти [/spec/rules/0/host]
+CASE_0099,3,R-SC-001,0,R-SC-001: allowPrivilegeEscalation включён [/spec/template/spec/containers/0/securityContext/allowPrivilegeEscalation]
+CASE_0101,2,R-BEH-010,0,"R-BEH-010: Усиление или иное изменение securityContext (поведение меняется, угрозы нет) [/spec/template/spec/containers/0/securityContext/readOnlyRootFilesystem]"
+CASE_0102,4,R-BEH-016;R-HOST-003,0,"R-HOST-003: Монтирование чувствительного пути хоста (/, /etc, /proc, /sys, docker.sock, ...) [/spec/template/spec/volumes/5/hostPath/path]"
+CASE_0103,4,R-CRED-003,0,R-CRED-003: Учётные данные открытым текстом в переменной окружения контейнера [/spec/template/spec/containers/0/env/17]
+CASE_0104,2,R-BEH-002,0,R-BEH-002: Изменены ресурсы контейнера (requests/limits) [/spec/template/spec/containers/0/resources/limits/cpu]
+CASE_0105,4,R-BEH-012;R-HOST-001;R-SC-001,0,R-HOST-001: Привилегированный контейнер (privileged true) - выход за пределы изоляции [/spec/template/spec/containers/0/securityContext/privileged]
+CASE_0106,3,R-AVL-002,0,R-AVL-002: Изменён selector Service - поды могут не находиться [/spec/selector/app.kubernetes.io~1component]
+CASE_0107,2,R-AVL-015,0,R-AVL-015: Удалена переменная окружения контейнера [/spec/template/spec/containers/0/env/2]
+CASE_0108,2,R-AVL-014,0,"R-AVL-014: Удалено разрешающее правило NetworkPolicy, нужное приложению [/spec/ingress/0/ports]"
+CASE_0109,2,R-BEH-005,0,R-BEH-005: Изменено планирование пода (nodeSelector/tolerations/affinity/приоритет) [/spec/template/spec/affinity]
+CASE_0111,3,R-AVL-003;R-COS-001,0,R-AVL-003: Изменён port/targetPort Service [/spec/ports/0/port]
+CASE_0112,3,R-AVL-013,0,"R-AVL-013: Удалено или изменено правило RBAC, нужное приложению [/rules/1]"
+CASE_0113,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/annotations]
+CASE_0114,4,R-BEH-016;R-HOST-003,0,"R-HOST-003: Монтирование чувствительного пути хоста (/, /etc, /proc, /sys, docker.sock, ...) [/spec/template/spec/volumes/3/hostPath/path]"
+CASE_0115,2,R-AVL-003,0,R-AVL-003: Изменён port/targetPort Service [/spec/ports/0/targetPort]
+CASE_0116,2,,1,FALLBACK: no rule matched [/spec/template/spec/containers/0/livenessProbe/periodSeconds]
+CASE_0117,3,R-AVL-016;R-BEH-004;R-BEH-012,0,"R-AVL-016: Изменено значение переменной окружения, влияющее на запуск (порт/адрес/путь/библиотека) [/spec/template/spec/containers/0/env/0/value]"
+CASE_0119,4,R-COS-001;R-RBAC-001,0,R-RBAC-001: Wildcard '*' в verbs или resources правила RBAC [/rules/1/resources]
+CASE_0122,3,R-HOST-005,0,R-HOST-005: hostPort открывает порт на узле [/spec/template/spec/containers/0/ports/0/hostPort]
+CASE_0123,4,R-COS-001;R-RBAC-005,0,"R-RBAC-005: Добавлен или изменён субъект привязки RBAC (в т.ч. system:authenticated, чужой ServiceAccount) [/subjects/1]"
+CASE_0124,2,,1,FALLBACK: no rule matched [/spec/template/spec/containers/0/readinessProbe/failureThreshold]
+CASE_0125,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/labels/app.kubernetes.io~1version]
+CASE_0126,3,R-NET-004,0,R-NET-004: Добавлено разрешающее правило NetworkPolicy (расширение доступа) [/spec/ingress/1]
+CASE_0128,4,R-HOST-004,0,"R-HOST-004: Опасные Linux capabilities (SYS_ADMIN, SYS_MODULE, SYS_PTRACE и аналоги) [/spec/template/spec/containers/0/securityContext/capabilities/add]"
+CASE_0129,3,R-SEC-002,0,R-SEC-002: Изменена ссылка на Secret (env/envFrom/volume) [/spec/template/spec/containers/0/env/16/valueFrom/secretKeyRef/name]
+CASE_0131,4,R-COS-001;R-RBAC-005,0,"R-RBAC-005: Добавлен или изменён субъект привязки RBAC (в т.ч. system:authenticated, чужой ServiceAccount) [/subjects/1]"
+CASE_0132,2,R-BEH-011;R-COS-001,0,R-BEH-011: Изменено значение ConfigMap (конфигурация приложения) [/data]
+CASE_0134,3,R-SC-006,0,R-SC-006: Удалён блок securityContext [/spec/template/spec/containers/0/securityContext]
+CASE_0135,2,R-BEH-001,0,R-BEH-001: Изменено число реплик [/spec/replicas]
+CASE_0136,2,R-BEH-011,0,R-BEH-011: Изменено значение ConfigMap (конфигурация приложения) [/data/ping_readiness_local_and_master.sh]
+CASE_0137,2,,1,FALLBACK: no rule matched [/spec/template/spec/automountServiceAccountToken]
+CASE_0139,2,R-AVL-006,0,R-AVL-006: Удалена probe (readiness/liveness/startup) [/spec/template/spec/containers/0/startupProbe]
+CASE_0140,2,R-BEH-003,0,"R-BEH-003: Изменён образ контейнера (тег, digest, репозиторий) [/spec/template/spec/containers/0/image]"
+CASE_0142,2,R-BEH-002,0,R-BEH-002: Изменены ресурсы контейнера (requests/limits) [/spec/template/spec/containers/0/resources/limits/cpu]
+CASE_0144,3,R-BEH-012;R-SC-003,1,R-SC-003: Запуск от root (runAsUser 0 / runAsNonRoot false) [/spec/template/spec/containers/0/securityContext/runAsUser]
+CASE_0145,4,R-COS-001;R-CRED-001,0,R-CRED-001: Учётные данные открытым текстом в ConfigMap (ключ) [/data/password]
+CASE_0146,4,R-CRED-003,0,R-CRED-003: Учётные данные открытым текстом в переменной окружения контейнера [/spec/template/spec/containers/0/env/0]
+CASE_0147,3,R-SC-008,0,"R-SC-008: Добавлены capabilities (NET_ADMIN, NET_BIND_SERVICE и др.) [/spec/template/spec/containers/0/securityContext/capabilities/add]"
+CASE_0148,3,R-COS-001;R-SEC-001,0,R-SEC-001: Изменено значение Secret (учётные данные расходятся с Git) [/data/postgres-password]
+CASE_0149,3,R-AVL-006;R-BEH-002,0,R-AVL-006: Удалена probe (readiness/liveness/startup) [/spec/template/spec/containers/0/readinessProbe]
+CASE_0150,2,R-AVL-008;R-BEH-002,0,R-AVL-008: Лимит ресурсов уменьшен вдвое и более - риск OOM/троттлинга [/spec/template/spec/containers/0/resources/limits/cpu]
+CASE_0151,4,R-COS-001;R-RBAC-005,0,"R-RBAC-005: Добавлен или изменён субъект привязки RBAC (в т.ч. system:authenticated, чужой ServiceAccount) [/subjects/1]"
+CASE_0153,3,R-AVL-014,0,"R-AVL-014: Удалено разрешающее правило NetworkPolicy, нужное приложению [/spec/ingress/0]"
+CASE_0154,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/labels/build-number]
+CASE_0155,2,R-AVL-008;R-BEH-002,0,R-AVL-008: Лимит ресурсов уменьшен вдвое и более - риск OOM/троттлинга [/spec/template/spec/containers/0/resources/limits/cpu]
+CASE_0156,2,R-BEH-005,0,R-BEH-005: Изменено планирование пода (nodeSelector/tolerations/affinity/приоритет) [/spec/template/spec/nodeSelector/disktype]
+CASE_0157,2,R-BEH-009;R-COS-001,0,R-BEH-009: Изменены параметры HPA [/spec/metrics/0/resource/target/averageUtilization]
+CASE_0160,4,R-RBAC-005,0,"R-RBAC-005: Добавлен или изменён субъект привязки RBAC (в т.ч. system:authenticated, чужой ServiceAccount) [/subjects/1]"
+CASE_0161,3,R-RBAC-006,0,R-RBAC-006: Расширение прав RBAC (добавлено правило/глагол) [/rules/28]
+CASE_0162,2,R-BEH-005,0,R-BEH-005: Изменено планирование пода (nodeSelector/tolerations/affinity/приоритет) [/spec/template/spec/affinity]
+CASE_0164,3,R-SC-001,0,R-SC-001: allowPrivilegeEscalation включён [/spec/template/spec/containers/0/securityContext/allowPrivilegeEscalation]
+CASE_0166,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/annotations]
+CASE_0167,4,R-BEH-016;R-HOST-003,0,"R-HOST-003: Монтирование чувствительного пути хоста (/, /etc, /proc, /sys, docker.sock, ...) [/spec/template/spec/volumes/3/hostPath/path]"
+CASE_0168,3,R-SEC-001,0,R-SEC-001: Изменено значение Secret (учётные данные расходятся с Git) [/data/postgres-password]
+CASE_0169,2,R-BEH-011,0,R-BEH-011: Изменено значение ConfigMap (конфигурация приложения) [/data/ping_readiness_local_and_master.sh]
+CASE_0170,3,R-SA-002,0,R-SA-002: automountServiceAccountToken включён (или снято отключение) [/spec/jobTemplate/spec/template/spec/automountServiceAccountToken]
+CASE_0172,3,R-COS-001;R-SEC-001,0,R-SEC-001: Изменено значение Secret (учётные данные расходятся с Git) [/data/redis-password]
+CASE_0173,2,R-AVL-004,0,R-AVL-004: Изменён host/path/pathType/backend Ingress - трафик может не дойти [/spec/rules/0/http/paths/0/pathType]
+CASE_0174,3,R-AVL-007,0,R-AVL-007: Изменён порт/путь/команда probe [/spec/template/spec/containers/0/livenessProbe/httpGet/port]
+CASE_0176,4,R-CRED-001,0,R-CRED-001: Учётные данные открытым текстом в ConfigMap (ключ) [/data/password]
+CASE_0179,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/labels/owner]
+CASE_0180,2,R-BEH-007,0,R-BEH-007: Изменена стратегия выкатки [/spec/strategy]
+CASE_0181,2,R-AVL-014,0,"R-AVL-014: Удалено разрешающее правило NetworkPolicy, нужное приложению [/spec/ingress/0]"
+CASE_0182,3,R-AVL-002,0,R-AVL-002: Изменён selector Service - поды могут не находиться [/spec/selector/app.kubernetes.io~1name]
+CASE_0183,3,R-RBAC-006,0,R-RBAC-006: Расширение прав RBAC (добавлено правило/глагол) [/rules/9]
+CASE_0184,2,R-BEH-006,0,R-BEH-006: Изменены переменные окружения контейнера (не критичные) [/spec/template/spec/containers/0/env/3]
+CASE_0185,2,R-BEH-005,0,R-BEH-005: Изменено планирование пода (nodeSelector/tolerations/affinity/приоритет) [/spec/template/spec/tolerations]
+CASE_0186,4,R-HOST-002;R-SC-005,0,R-HOST-002: Общие пространства имён хоста (hostPID/hostNetwork/hostIPC true) [/spec/template/spec/hostNetwork]
+CASE_0188,3,R-AVL-004,0,R-AVL-004: Изменён host/path/pathType/backend Ingress - трафик может не дойти [/spec/rules/0/host]
+CASE_0189,2,R-BEH-012,0,"R-BEH-012: Аннотация, меняющая поведение инфраструктуры (ingress-контроллер, sidecar, checksum) [/spec/template/metadata/annotations/linkerd.io~1inject]"
+CASE_0190,3,R-BEH-016;R-HOST-007,0,R-HOST-007: Добавлен том hostPath [/spec/template/spec/volumes/5]
+CASE_0191,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/labels/app.kubernetes.io~1version]
+CASE_0192,3,R-AVL-014,0,"R-AVL-014: Удалено разрешающее правило NetworkPolicy, нужное приложению [/spec/egress/0/ports]"
+CASE_0193,4,R-COS-001;R-NET-001,0,"R-NET-001: Правило NetworkPolicy, разрешающее весь трафик ({}) [/spec/ingress/0]"
+CASE_0194,3,R-AVL-010,0,R-AVL-010: Тег образа latest (при перезапуске может подтянуться другая версия) [/spec/template/spec/containers/0/image]
+CASE_0195,2,R-BEH-008;R-COS-001,0,R-BEH-008: Изменены параметры PodDisruptionBudget [/spec/minAvailable]
+CASE_0197,3,R-AVL-001;R-SC-001,0,R-AVL-001: replicas = 0 - сервис остановлен [/spec/replicas]
+CASE_0198,3,R-SA-001,0,R-SA-001: Изменён serviceAccountName (смена на default или SA другого приложения) [/spec/template/spec/serviceAccountName]
+CASE_0199,2,R-AVL-006,0,R-AVL-006: Удалена probe (readiness/liveness/startup) [/spec/template/spec/containers/0/readinessProbe]
+CASE_0201,4,R-RBAC-001,0,R-RBAC-001: Wildcard '*' в verbs или resources правила RBAC [/rules/19/resources]
+CASE_0202,4,R-HOST-004,0,"R-HOST-004: Опасные Linux capabilities (SYS_ADMIN, SYS_MODULE, SYS_PTRACE и аналоги) [/spec/template/spec/containers/0/securityContext/capabilities/add]"
+CASE_0203,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/labels/pipeline.run~1id]
+CASE_0204,2,R-BEH-010,0,"R-BEH-010: Усиление или иное изменение securityContext (поведение меняется, угрозы нет) [/spec/template/spec/containers/0/securityContext/readOnlyRootFilesystem]"
+CASE_0205,2,R-BEH-004,0,R-BEH-004: Изменена imagePullPolicy [/spec/template/spec/containers/0/imagePullPolicy]
+CASE_0207,3,R-AVL-014;R-COS-001,0,"R-AVL-014: Удалено разрешающее правило NetworkPolicy, нужное приложению [/spec/ingress/0]"
+CASE_0208,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/labels/env-ticket]
+CASE_0210,4,R-HOST-002,0,R-HOST-002: Общие пространства имён хоста (hostPID/hostNetwork/hostIPC true) [/spec/template/spec/hostIPC]
+CASE_0211,2,R-BEH-009;R-COS-001,0,R-BEH-009: Изменены параметры HPA [/spec/metrics/0/resource/target/averageUtilization]
+CASE_0213,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/labels/env-ticket]
+CASE_0214,2,,1,FALLBACK: no rule matched [/spec/template/spec/containers/0/livenessProbe/failureThreshold]
+CASE_0215,4,R-HOST-002,0,R-HOST-002: Общие пространства имён хоста (hostPID/hostNetwork/hostIPC true) [/spec/template/spec/hostNetwork]
+CASE_0216,2,R-BEH-012,0,"R-BEH-012: Аннотация, меняющая поведение инфраструктуры (ingress-контроллер, sidecar, checksum) [/spec/template/metadata/annotations/sidecar.istio.io~1inject]"
+CASE_0218,3,R-SEC-002,0,R-SEC-002: Изменена ссылка на Secret (env/envFrom/volume) [/spec/template/spec/containers/0/env/4/valueFrom/secretKeyRef/name]
+CASE_0220,4,R-HOST-002,0,R-HOST-002: Общие пространства имён хоста (hostPID/hostNetwork/hostIPC true) [/spec/template/spec/hostPID]
+CASE_0221,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/labels/app.kubernetes.io~1version]
+CASE_0223,2,R-BEH-004,0,R-BEH-004: Изменена imagePullPolicy [/spec/template/spec/containers/0/imagePullPolicy]
+CASE_0224,3,R-AVL-003,0,R-AVL-003: Изменён port/targetPort Service [/spec/ports/0/targetPort]
+CASE_0225,4,R-RBAC-001,0,R-RBAC-001: Wildcard '*' в verbs или resources правила RBAC [/rules/19/resources]
+CASE_0226,4,R-RBAC-002,0,"R-RBAC-002: Доступ RBAC к secrets, pods/exec и аналогам [/rules/2/resources]"
+CASE_0227,2,R-AVL-014,0,"R-AVL-014: Удалено разрешающее правило NetworkPolicy, нужное приложению [/spec/ingress/0]"
+CASE_0229,2,R-BEH-009,0,R-BEH-009: Изменены параметры HPA [/spec/maxReplicas]
+CASE_0230,2,R-BEH-008,0,R-BEH-008: Изменены параметры PodDisruptionBudget [/spec/minAvailable]
+CASE_0231,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/labels/app.kubernetes.io~1version]
+CASE_0232,4,R-IMG-001,0,R-IMG-001: Образ из стороннего непроверенного registry [/spec/template/spec/containers/0/image]
+CASE_0233,2,R-BEH-006,0,R-BEH-006: Изменены переменные окружения контейнера (не критичные) [/spec/template/spec/containers/0/env/3]
+CASE_0234,2,R-BEH-008;R-COS-001,0,R-BEH-008: Изменены параметры PodDisruptionBudget [/spec/minAvailable]
+CASE_0235,4,R-RBAC-001,0,R-RBAC-001: Wildcard '*' в verbs или resources правила RBAC [/rules/5/verbs]
+CASE_0236,4,R-HOST-001;R-SC-001,0,R-HOST-001: Привилегированный контейнер (privileged true) - выход за пределы изоляции [/spec/template/spec/containers/0/securityContext/privileged]
+CASE_0237,4,R-HOST-004,0,"R-HOST-004: Опасные Linux capabilities (SYS_ADMIN, SYS_MODULE, SYS_PTRACE и аналоги) [/spec/template/spec/containers/0/securityContext/capabilities/add]"
+CASE_0240,2,R-BEH-008,0,R-BEH-008: Изменены параметры PodDisruptionBudget [/spec/minAvailable]
+CASE_0241,4,R-BEH-012;R-HOST-001;R-SC-001;R-SEC-002,0,R-HOST-001: Привилегированный контейнер (privileged true) - выход за пределы изоляции [/spec/template/spec/containers/0/securityContext/privileged]
+CASE_0242,3,R-SC-003,0,R-SC-003: Запуск от root (runAsUser 0 / runAsNonRoot false) [/spec/template/spec/containers/0/securityContext/runAsUser]
+CASE_0243,4,R-CRED-001,0,R-CRED-001: Учётные данные открытым текстом в ConfigMap (ключ) [/data/aws_secret_access_key]
+CASE_0246,3,R-COS-001;R-SEC-001,0,R-SEC-001: Изменено значение Secret (учётные данные расходятся с Git) [/data/tls.key]
+CASE_0248,4,R-BEH-001;R-BEH-002;R-BEH-016;R-HOST-003,0,"R-HOST-003: Монтирование чувствительного пути хоста (/, /etc, /proc, /sys, docker.sock, ...) [/spec/template/spec/volumes/5/hostPath/path]"
+CASE_0249,3,R-SC-008,0,"R-SC-008: Добавлены capabilities (NET_ADMIN, NET_BIND_SERVICE и др.) [/spec/template/spec/containers/0/securityContext/capabilities/add]"
+CASE_0250,4,R-HOST-002,0,R-HOST-002: Общие пространства имён хоста (hostPID/hostNetwork/hostIPC true) [/spec/template/spec/hostNetwork]
+CASE_0251,2,,1,FALLBACK: no rule matched [/spec/template/spec/containers/0/livenessProbe/periodSeconds]
+CASE_0252,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/annotations]
+CASE_0253,3,R-COS-001;R-NET-004,0,R-NET-004: Добавлено разрешающее правило NetworkPolicy (расширение доступа) [/spec/ingress/1]
+CASE_0255,2,R-AVL-002,0,R-AVL-002: Изменён selector Service - поды могут не находиться [/spec/selector/app.kubernetes.io~1name]
+CASE_0256,3,R-HOST-005,0,R-HOST-005: hostPort открывает порт на узле [/spec/template/spec/containers/0/ports/0/hostPort]
+CASE_0257,4,R-IMG-001,0,R-IMG-001: Образ из стороннего непроверенного registry [/spec/jobTemplate/spec/template/spec/containers/0/image]
+CASE_0259,3,R-SEC-001,0,R-SEC-001: Изменено значение Secret (учётные данные расходятся с Git) [/data/redis-password]
+CASE_0260,4,R-RBAC-002,0,"R-RBAC-002: Доступ RBAC к secrets, pods/exec и аналогам [/rules/10/resources]"
+CASE_0261,2,R-AVL-009;R-BEH-012,0,"R-BEH-012: Аннотация, меняющая поведение инфраструктуры (ingress-контроллер, sidecar, checksum) [/spec/template/metadata/annotations/checksum~1config]"
+CASE_0262,2,R-BEH-009;R-COS-001,0,R-BEH-009: Изменены параметры HPA [/spec/maxReplicas]
+CASE_0263,3,R-AVL-012,0,R-AVL-012: HPA ограничен одной репликой [/spec/maxReplicas]
+CASE_0264,2,R-BEH-008,0,R-BEH-008: Изменены параметры PodDisruptionBudget [/spec/minAvailable]
+CASE_0267,2,R-AVL-002,0,R-AVL-002: Изменён selector Service - поды могут не находиться [/spec/selector/app.kubernetes.io~1component]
+CASE_0268,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/annotations]
+CASE_0269,3,R-NET-004,0,R-NET-004: Добавлено разрешающее правило NetworkPolicy (расширение доступа) [/spec/ingress/1]
+CASE_0270,3,R-AVL-009,0,R-AVL-009: imagePullPolicy Never [/spec/template/spec/containers/0/imagePullPolicy]
+CASE_0271,3,R-NET-004,0,R-NET-004: Добавлено разрешающее правило NetworkPolicy (расширение доступа) [/spec/ingress/1]
+CASE_0272,3,R-AVL-006,0,R-AVL-006: Удалена probe (readiness/liveness/startup) [/spec/template/spec/containers/0/livenessProbe]
+CASE_0273,2,,1,FALLBACK: no rule matched [/spec/template/spec/containers/0/livenessProbe/periodSeconds]
+CASE_0274,3,R-NET-004,0,R-NET-004: Добавлено разрешающее правило NetworkPolicy (расширение доступа) [/spec/ingress/1]
+CASE_0275,4,R-HOST-004,0,"R-HOST-004: Опасные Linux capabilities (SYS_ADMIN, SYS_MODULE, SYS_PTRACE и аналоги) [/spec/template/spec/containers/0/securityContext/capabilities/add]"
+CASE_0276,2,,1,FALLBACK: no rule matched [/spec/template/spec/containers/0/readinessProbe/periodSeconds]
+CASE_0278,3,R-SEC-001,0,R-SEC-001: Изменено значение Secret (учётные данные расходятся с Git) [/data/redis-password]
+CASE_0279,4,R-IMG-001,0,R-IMG-001: Образ из стороннего непроверенного registry [/spec/jobTemplate/spec/template/spec/containers/0/image]
+CASE_0281,3,R-AVL-016,0,"R-AVL-016: Изменено значение переменной окружения, влияющее на запуск (порт/адрес/путь/библиотека) [/spec/template/spec/containers/0/env/2/value]"
+CASE_0282,4,R-CRED-001,0,R-CRED-001: Учётные данные открытым текстом в ConfigMap (ключ) [/data/aws_secret_access_key]
+CASE_0283,3,R-AVL-016;R-BEH-012,0,"R-AVL-016: Изменено значение переменной окружения, влияющее на запуск (порт/адрес/путь/библиотека) [/spec/template/spec/containers/0/env/0/value]"
+CASE_0285,2,R-AVL-012,0,R-AVL-012: HPA ограничен одной репликой [/spec/maxReplicas]
+CASE_0286,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/labels/pipeline.run~1id]
+CASE_0287,2,R-BEH-011;R-COS-001,0,R-BEH-011: Изменено значение ConfigMap (конфигурация приложения) [/data/start-replica.sh]
+CASE_0288,2,R-BEH-012,0,"R-BEH-012: Аннотация, меняющая поведение инфраструктуры (ingress-контроллер, sidecar, checksum) [/metadata/annotations/nginx.ingress.kubernetes.io~1proxy-body-size]"
+CASE_0289,2,R-BEH-009;R-COS-001,0,R-BEH-009: Изменены параметры HPA [/spec/maxReplicas]
+CASE_0290,2,,1,FALLBACK: no rule matched [/spec/template/spec/containers/0/livenessProbe/timeoutSeconds]
+CASE_0291,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/labels/owner]
+CASE_0292,2,R-AVL-014;R-COS-001,0,"R-AVL-014: Удалено разрешающее правило NetworkPolicy, нужное приложению [/spec/ingress/0]"
+CASE_0293,4,R-HOST-002,0,R-HOST-002: Общие пространства имён хоста (hostPID/hostNetwork/hostIPC true) [/spec/template/spec/hostPID]
+CASE_0294,3,R-AVL-004,0,R-AVL-004: Изменён host/path/pathType/backend Ingress - трафик может не дойти [/spec/rules/0/http/paths/0/path]
+CASE_0297,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/labels/app.kubernetes.io~1version]
+CASE_0299,1,R-COS-001,0,R-COS-001: Информационные метки и аннотации ресурса [/metadata/labels/build-number]
+CASE_0300,3,R-SEC-002,0,R-SEC-002: Изменена ссылка на Secret (env/envFrom/volume) [/spec/template/spec/containers/0/env/16/valueFrom/secretKeyRef/name]
+CASE_0301,4,R-BEH-016;R-HOST-003,0,"R-HOST-003: Монтирование чувствительного пути хоста (/, /etc, /proc, /sys, docker.sock, ...) [/spec/template/spec/volumes/3/hostPath/path]"
+CASE_0302,2,R-AVL-014,0,"R-AVL-014: Удалено разрешающее правило NetworkPolicy, нужное приложению [/spec/egress/0/ports]"
+CASE_0303,2,R-BEH-002,0,R-BEH-002: Изменены ресурсы контейнера (requests/limits) [/spec/template/spec/containers/0/resources]
+CASE_0304,3,R-AVL-014,0,"R-AVL-014: Удалено разрешающее правило NetworkPolicy, нужное приложению [/spec/ingress/0]"
+CASE_0305,4,R-RBAC-001,0,R-RBAC-001: Wildcard '*' в verbs или resources правила RBAC [/rules/0/verbs]
+CASE_0306,4,R-SVC-001,0,"R-SVC-001: Внутренний сервис (СУБД, кэш, брокер, служебный компонент) выведен наружу (NodePort/LoadBalancer) [/spec/type]"
+CASE_0307,4,R-RBAC-001,0,R-RBAC-001: Wildcard '*' в verbs или resources правила RBAC [/rules/5/verbs]
+CASE_0309,3,R-COS-001;R-SVC-002,0,R-SVC-002: Сервис опубликован наружу (NodePort/LoadBalancer) [/spec/type]
+CASE_0310,3,R-SA-002,0,R-SA-002: automountServiceAccountToken включён (или снято отключение) [/spec/template/spec/automountServiceAccountToken]
+CASE_0312,3,R-SC-003,0,R-SC-003: Запуск от root (runAsUser 0 / runAsNonRoot false) [/spec/template/spec/containers/0/securityContext/runAsNonRoot]
+CASE_0313,2,R-BEH-006,0,R-BEH-006: Изменены переменные окружения контейнера (не критичные) [/spec/template/spec/containers/0/env]
+CASE_0315,2,R-BEH-011,0,R-BEH-011: Изменено значение ConfigMap (конфигурация приложения) [/data/override.conf]
+CASE_0316,3,R-AVL-007,0,R-AVL-007: Изменён порт/путь/команда probe [/spec/template/spec/containers/0/livenessProbe/httpGet/path]
+CASE_0317,3,R-SC-003,0,R-SC-003: Запуск от root (runAsUser 0 / runAsNonRoot false) [/spec/jobTemplate/spec/template/spec/containers/0/securityContext/runAsUser]
+CASE_0319,2,R-BEH-010,0,"R-BEH-010: Усиление или иное изменение securityContext (поведение меняется, угрозы нет) [/spec/template/spec/containers/0/securityContext/capabilities]"
+CASE_0321,3,R-COS-001;R-SEC-001,0,R-SEC-001: Изменено значение Secret (учётные данные расходятся с Git) [/data/tls.key]
+CASE_0323,2,,1,FALLBACK: no rule matched [/spec/template/spec/automountServiceAccountToken]
+CASE_0325,2,R-BEH-009,0,R-BEH-009: Изменены параметры HPA [/spec/metrics/0/resource/target/averageUtilization]
+CASE_0326,2,R-BEH-006,0,R-BEH-006: Изменены переменные окружения контейнера (не критичные) [/spec/template/spec/containers/0/env]
+CASE_0327,4,R-CRED-001,0,R-CRED-001: Учётные данные открытым текстом в ConfigMap (ключ) [/data/password]
+CASE_0328,4,R-BEH-016;R-HOST-003,0,"R-HOST-003: Монтирование чувствительного пути хоста (/, /etc, /proc, /sys, docker.sock, ...) [/spec/template/spec/volumes/3/hostPath/path]"
+CASE_0329,3,R-BEH-006;R-SC-005,0,R-SC-005: readOnlyRootFilesystem выключен [/spec/template/spec/containers/0/securityContext/readOnlyRootFilesystem]
+CASE_0330,2,R-BEH-003,0,"R-BEH-003: Изменён образ контейнера (тег, digest, репозиторий) [/spec/template/spec/containers/0/image]"

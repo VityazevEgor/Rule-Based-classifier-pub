@@ -1,0 +1,34 @@
+{
+ "case_id": "CASE_0327",
+ "desired": {
+  "apiVersion": "v1",
+  "data": {
+   "server-block.conf": "server {\n  listen 8080;\n  location / {\n    return 200 \"OK\";\n  }\n}"
+  },
+  "kind": "ConfigMap",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/instance": "nginx-prod",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "nginx",
+    "app.kubernetes.io/version": "1.31.7",
+    "environment": "prod",
+    "helm.sh/chart": "nginx-25.2.5"
+   },
+   "name": "nginx-prod-server-block",
+   "namespace": "nginx-prod"
+  }
+ },
+ "diff": [
+  {
+   "new": "plain-pass-773",
+   "old": null,
+   "op": "add",
+   "path": "/data/password"
+  }
+ ],
+ "environment": "prod",
+ "namespace": "nginx-prod",
+ "resource_kind": "ConfigMap",
+ "resource_name": "nginx-prod-server-block"
+}

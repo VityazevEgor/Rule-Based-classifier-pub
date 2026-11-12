@@ -1,0 +1,313 @@
+{
+ "case_id": "CASE_0045",
+ "desired": {
+  "apiVersion": "apps/v1",
+  "kind": "StatefulSet",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/component": "master",
+    "app.kubernetes.io/instance": "redis-dev",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "redis",
+    "app.kubernetes.io/version": "8.10.2",
+    "environment": "dev",
+    "helm.sh/chart": "redis-28.3.1"
+   },
+   "name": "redis-dev-master",
+   "namespace": "redis-dev"
+  },
+  "spec": {
+   "replicas": 1,
+   "revisionHistoryLimit": 10,
+   "selector": {
+    "matchLabels": {
+     "app.kubernetes.io/component": "master",
+     "app.kubernetes.io/instance": "redis-dev",
+     "app.kubernetes.io/name": "redis"
+    }
+   },
+   "serviceName": "redis-dev-headless",
+   "template": {
+    "metadata": {
+     "annotations": {
+      "checksum/configmap": "62ff2843192643ad74a96fbad607a0b92db3dc81d3a369deaa3fb9aebbd24ddc",
+      "checksum/health": "a2fc61ae99390643dac0673ed97203805136d4460b2319e7beff10546c1e1140",
+      "checksum/scripts": "2eead4e62a259add32cbbac865cb661d0bde26bdffcd8fd5eacd2b7469cddb27",
+      "checksum/secret": "1c372d8461865400fce117396856b7138b639309df0bebfcd851cbef36a9af5e"
+     },
+     "labels": {
+      "app.kubernetes.io/component": "master",
+      "app.kubernetes.io/instance": "redis-dev",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/name": "redis",
+      "app.kubernetes.io/version": "8.10.2",
+      "helm.sh/chart": "redis-28.3.1"
+     }
+    },
+    "spec": {
+     "affinity": {
+      "nodeAffinity": null,
+      "podAffinity": null,
+      "podAntiAffinity": {
+       "preferredDuringSchedulingIgnoredDuringExecution": [
+        {
+         "podAffinityTerm": {
+          "labelSelector": {
+           "matchLabels": {
+            "app.kubernetes.io/component": "master",
+            "app.kubernetes.io/instance": "redis-dev",
+            "app.kubernetes.io/name": "redis"
+           }
+          },
+          "topologyKey": "kubernetes.io/hostname"
+         },
+         "weight": 1
+        }
+       ]
+      }
+     },
+     "automountServiceAccountToken": false,
+     "containers": [
+      {
+       "args": [
+        "-ec",
+        "/opt/bitnami/scripts/start-scripts/start-master.sh"
+       ],
+       "command": [
+        "/bin/bash"
+       ],
+       "env": [
+        {
+         "name": "BITNAMI_DEBUG",
+         "value": "false"
+        },
+        {
+         "name": "REDIS_REPLICATION_MODE",
+         "value": "master"
+        },
+        {
+         "name": "ALLOW_EMPTY_PASSWORD",
+         "value": "no"
+        },
+        {
+         "name": "OPENSSL_FIPS",
+         "value": "yes"
+        },
+        {
+         "name": "REDIS_PASSWORD_FILE",
+         "value": "/opt/bitnami/redis/secrets/redis-password"
+        },
+        {
+         "name": "REDIS_TLS_ENABLED",
+         "value": "no"
+        },
+        {
+         "name": "REDIS_PORT",
+         "value": "6379"
+        },
+        {
+         "name": "CACHE_SECRET_TOKEN",
+         "valueFrom": {
+          "secretKeyRef": {
+           "key": "token",
+           "name": "redis-secret-token"
+          }
+         }
+        }
+       ],
+       "image": "registry-1.docker.io/bitnami/redis:8.10.2",
+       "imagePullPolicy": "IfNotPresent",
+       "livenessProbe": {
+        "exec": {
+         "command": [
+          "/bin/bash",
+          "-ec",
+          "/health/ping_liveness_local.sh 5"
+         ]
+        },
+        "failureThreshold": 5,
+        "initialDelaySeconds": 20,
+        "periodSeconds": 5,
+        "successThreshold": 1,
+        "timeoutSeconds": 6
+       },
+       "name": "redis",
+       "ports": [
+        {
+         "containerPort": 6379,
+         "name": "redis"
+        }
+       ],
+       "readinessProbe": {
+        "exec": {
+         "command": [
+          "/bin/bash",
+          "-ec",
+          "/health/ping_readiness_local.sh 1"
+         ]
+        },
+        "failureThreshold": 5,
+        "initialDelaySeconds": 20,
+        "periodSeconds": 5,
+        "successThreshold": 1,
+        "timeoutSeconds": 2
+       },
+       "resources": {
+        "limits": {
+         "cpu": "150m",
+         "ephemeral-storage": "2Gi",
+         "memory": "192Mi"
+        },
+        "requests": {
+         "cpu": "100m",
+         "ephemeral-storage": "50Mi",
+         "memory": "128Mi"
+        }
+       },
+       "securityContext": {
+        "allowPrivilegeEscalation": false,
+        "capabilities": {
+         "drop": [
+          "ALL"
+         ]
+        },
+        "readOnlyRootFilesystem": true,
+        "runAsGroup": 1001,
+        "runAsNonRoot": true,
+        "runAsUser": 1001,
+        "seLinuxOptions": {},
+        "seccompProfile": {
+         "type": "RuntimeDefault"
+        }
+       },
+       "volumeMounts": [
+        {
+         "mountPath": "/opt/bitnami/scripts/start-scripts",
+         "name": "start-scripts"
+        },
+        {
+         "mountPath": "/health",
+         "name": "health"
+        },
+        {
+         "mountPath": "/opt/bitnami/redis/secrets/",
+         "name": "redis-password"
+        },
+        {
+         "mountPath": "/data",
+         "name": "redis-data"
+        },
+        {
+         "mountPath": "/opt/bitnami/redis/mounted-etc",
+         "name": "config"
+        },
+        {
+         "mountPath": "/opt/bitnami/redis/etc/",
+         "name": "empty-dir",
+         "subPath": "app-conf-dir"
+        },
+        {
+         "mountPath": "/tmp",
+         "name": "empty-dir",
+         "subPath": "tmp-dir"
+        }
+       ]
+      }
+     ],
+     "enableServiceLinks": true,
+     "securityContext": {
+      "fsGroup": 1001,
+      "fsGroupChangePolicy": "Always",
+      "supplementalGroups": [],
+      "sysctls": []
+     },
+     "serviceAccountName": "redis-dev-master",
+     "terminationGracePeriodSeconds": 30,
+     "volumes": [
+      {
+       "configMap": {
+        "defaultMode": 493,
+        "name": "redis-dev-scripts"
+       },
+       "name": "start-scripts"
+      },
+      {
+       "configMap": {
+        "defaultMode": 493,
+        "name": "redis-dev-health"
+       },
+       "name": "health"
+      },
+      {
+       "name": "redis-password",
+       "secret": {
+        "items": [
+         {
+          "key": "redis-password",
+          "path": "redis-password"
+         }
+        ],
+        "secretName": "redis-dev"
+       }
+      },
+      {
+       "configMap": {
+        "name": "redis-dev-configuration"
+       },
+       "name": "config"
+      },
+      {
+       "emptyDir": {},
+       "name": "empty-dir"
+      }
+     ]
+    }
+   },
+   "updateStrategy": {
+    "type": "RollingUpdate"
+   },
+   "volumeClaimTemplates": [
+    {
+     "apiVersion": "v1",
+     "kind": "PersistentVolumeClaim",
+     "metadata": {
+      "labels": {
+       "app.kubernetes.io/component": "master",
+       "app.kubernetes.io/instance": "redis-dev",
+       "app.kubernetes.io/name": "redis"
+      },
+      "name": "redis-data"
+     },
+     "spec": {
+      "accessModes": [
+       "ReadWriteOnce"
+      ],
+      "resources": {
+       "requests": {
+        "storage": "8Gi"
+       }
+      }
+     }
+    }
+   ]
+  }
+ },
+ "diff": [
+  {
+   "new": "600m",
+   "old": "150m",
+   "op": "replace",
+   "path": "/spec/template/spec/containers/0/resources/limits/cpu"
+  },
+  {
+   "new": "768Mi",
+   "old": "192Mi",
+   "op": "replace",
+   "path": "/spec/template/spec/containers/0/resources/limits/memory"
+  }
+ ],
+ "environment": "dev",
+ "namespace": "redis-dev",
+ "resource_kind": "StatefulSet",
+ "resource_name": "redis-dev-master"
+}

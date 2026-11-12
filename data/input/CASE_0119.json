@@ -1,0 +1,65 @@
+{
+ "case_id": "CASE_0119",
+ "desired": {
+  "apiVersion": "rbac.authorization.k8s.io/v1",
+  "kind": "Role",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/instance": "rabbitmq-dev",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "rabbitmq",
+    "app.kubernetes.io/version": "4.1.3",
+    "environment": "dev",
+    "helm.sh/chart": "rabbitmq-16.0.14"
+   },
+   "name": "rabbitmq-dev-endpoint-reader",
+   "namespace": "rabbitmq-dev"
+  },
+  "rules": [
+   {
+    "apiGroups": [
+     ""
+    ],
+    "resources": [
+     "endpoints"
+    ],
+    "verbs": [
+     "get"
+    ]
+   },
+   {
+    "apiGroups": [
+     ""
+    ],
+    "resources": [
+     "events"
+    ],
+    "verbs": [
+     "create"
+    ]
+   }
+  ]
+ },
+ "diff": [
+  {
+   "new": "TICKET-986",
+   "old": null,
+   "op": "add",
+   "path": "/metadata/labels/env-ticket"
+  },
+  {
+   "new": [
+    "*"
+   ],
+   "old": [
+    "events"
+   ],
+   "op": "replace",
+   "path": "/rules/1/resources"
+  }
+ ],
+ "environment": "dev",
+ "namespace": "rabbitmq-dev",
+ "resource_kind": "Role",
+ "resource_name": "rabbitmq-dev-endpoint-reader"
+}

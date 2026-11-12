@@ -1,0 +1,55 @@
+{
+ "case_id": "CASE_0123",
+ "desired": {
+  "apiVersion": "rbac.authorization.k8s.io/v1",
+  "kind": "ClusterRoleBinding",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/instance": "ingress-nginx-prod",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "ingress-nginx",
+    "app.kubernetes.io/part-of": "ingress-nginx",
+    "app.kubernetes.io/version": "1.15.1",
+    "environment": "prod",
+    "helm.sh/chart": "ingress-nginx-4.15.1"
+   },
+   "name": "ingress-nginx-prod"
+  },
+  "roleRef": {
+   "apiGroup": "rbac.authorization.k8s.io",
+   "kind": "ClusterRole",
+   "name": "ingress-nginx-prod"
+  },
+  "subjects": [
+   {
+    "kind": "ServiceAccount",
+    "name": "ingress-nginx-prod",
+    "namespace": "ingress-nginx-prod"
+   }
+  ]
+ },
+ "diff": [
+  {
+   "new": {
+    "backup.velero.io/backup-volumes": "data"
+   },
+   "old": null,
+   "op": "add",
+   "path": "/metadata/annotations"
+  },
+  {
+   "new": {
+    "kind": "ServiceAccount",
+    "name": "default",
+    "namespace": "default"
+   },
+   "old": null,
+   "op": "add",
+   "path": "/subjects/1"
+  }
+ ],
+ "environment": "prod",
+ "namespace": "ingress-nginx-prod",
+ "resource_kind": "ClusterRoleBinding",
+ "resource_name": "ingress-nginx-prod"
+}

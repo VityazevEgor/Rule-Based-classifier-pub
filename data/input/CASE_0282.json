@@ -1,0 +1,36 @@
+{
+ "case_id": "CASE_0282",
+ "desired": {
+  "apiVersion": "v1",
+  "data": {
+   "master.conf": "dir /data\n# User-supplied master configuration:\nrename-command FLUSHDB \"\"\nrename-command FLUSHALL \"\"\n# End of master configuration",
+   "redis.conf": "# User-supplied common configuration:\n# Enable ReJSON y Redisearch\nloadmodule /opt/bitnami/redis/lib/redis/modules/redisearch.so\nloadmodule /opt/bitnami/redis/lib/redis/modules/rejson.so\n# Enable AOF https://redis.io/topics/persistence#append-only-file\nappendonly yes\n# Disable RDB persistence, AOF persistence already enabled.\nsave \"\"\n# End of common configuration",
+   "replica.conf": "dir /data\n# User-supplied replica configuration:\nrename-command FLUSHDB \"\"\nrename-command FLUSHALL \"\"\n# End of replica configuration"
+  },
+  "kind": "ConfigMap",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/instance": "redis-dev",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "redis",
+    "app.kubernetes.io/version": "8.10.2",
+    "environment": "dev",
+    "helm.sh/chart": "redis-28.3.1"
+   },
+   "name": "redis-dev-configuration",
+   "namespace": "redis-dev"
+  }
+ },
+ "diff": [
+  {
+   "new": "AKIA440802EXAMPLE",
+   "old": null,
+   "op": "add",
+   "path": "/data/aws_secret_access_key"
+  }
+ ],
+ "environment": "dev",
+ "namespace": "redis-dev",
+ "resource_kind": "ConfigMap",
+ "resource_name": "redis-dev-configuration"
+}

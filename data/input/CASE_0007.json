@@ -1,0 +1,83 @@
+{
+ "case_id": "CASE_0007",
+ "desired": {
+  "apiVersion": "networking.k8s.io/v1",
+  "kind": "NetworkPolicy",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/instance": "rabbitmq-prod",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "rabbitmq",
+    "app.kubernetes.io/version": "4.1.3",
+    "environment": "prod",
+    "helm.sh/chart": "rabbitmq-16.0.14"
+   },
+   "name": "rabbitmq-prod",
+   "namespace": "rabbitmq-prod"
+  },
+  "spec": {
+   "egress": [
+    {}
+   ],
+   "ingress": [
+    {
+     "ports": [
+      {
+       "port": 4369
+      },
+      {
+       "port": 5672
+      },
+      {
+       "port": 5671
+      },
+      {
+       "port": 25672
+      },
+      {
+       "port": 15672
+      }
+     ]
+    }
+   ],
+   "podSelector": {
+    "matchLabels": {
+     "app.kubernetes.io/instance": "rabbitmq-prod",
+     "app.kubernetes.io/name": "rabbitmq"
+    }
+   },
+   "policyTypes": [
+    "Ingress",
+    "Egress"
+   ]
+  }
+ },
+ "diff": [
+  {
+   "new": "TICKET-381",
+   "old": null,
+   "op": "add",
+   "path": "/metadata/labels/env-ticket"
+  },
+  {
+   "new": {
+    "from": [
+     {
+      "podSelector": {
+       "matchLabels": {
+        "app.kubernetes.io/name": "frontend-proxy"
+       }
+      }
+     }
+    ]
+   },
+   "old": null,
+   "op": "add",
+   "path": "/spec/ingress/1"
+  }
+ ],
+ "environment": "prod",
+ "namespace": "rabbitmq-prod",
+ "resource_kind": "NetworkPolicy",
+ "resource_name": "rabbitmq-prod"
+}

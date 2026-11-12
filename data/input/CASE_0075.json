@@ -1,0 +1,48 @@
+{
+ "case_id": "CASE_0075",
+ "desired": {
+  "apiVersion": "policy/v1",
+  "kind": "PodDisruptionBudget",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/component": "replica",
+    "app.kubernetes.io/instance": "redis-prod",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "redis",
+    "app.kubernetes.io/version": "8.10.2",
+    "environment": "prod",
+    "helm.sh/chart": "redis-28.3.1"
+   },
+   "name": "redis-prod-replicas",
+   "namespace": "redis-prod"
+  },
+  "spec": {
+   "maxUnavailable": 1,
+   "selector": {
+    "matchLabels": {
+     "app.kubernetes.io/component": "replica",
+     "app.kubernetes.io/instance": "redis-prod",
+     "app.kubernetes.io/name": "redis"
+    }
+   }
+  }
+ },
+ "diff": [
+  {
+   "new": "pipe-3308",
+   "old": null,
+   "op": "add",
+   "path": "/metadata/labels/pipeline.run~1id"
+  },
+  {
+   "new": "100%",
+   "old": 1,
+   "op": "replace",
+   "path": "/spec/maxUnavailable"
+  }
+ ],
+ "environment": "prod",
+ "namespace": "redis-prod",
+ "resource_kind": "PodDisruptionBudget",
+ "resource_name": "redis-prod-replicas"
+}

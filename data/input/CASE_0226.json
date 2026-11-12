@@ -1,0 +1,67 @@
+{
+ "case_id": "CASE_0226",
+ "desired": {
+  "apiVersion": "rbac.authorization.k8s.io/v1",
+  "kind": "Role",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/instance": "rabbitmq-prod",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "rabbitmq",
+    "app.kubernetes.io/version": "4.1.3",
+    "environment": "prod",
+    "helm.sh/chart": "rabbitmq-16.0.14"
+   },
+   "name": "rabbitmq-prod-endpoint-reader",
+   "namespace": "rabbitmq-prod"
+  },
+  "rules": [
+   {
+    "apiGroups": [
+     ""
+    ],
+    "resources": [
+     "endpoints"
+    ],
+    "verbs": [
+     "get"
+    ]
+   },
+   {
+    "apiGroups": [
+     ""
+    ],
+    "resources": [
+     "events"
+    ],
+    "verbs": [
+     "create"
+    ]
+   }
+  ]
+ },
+ "diff": [
+  {
+   "new": {
+    "apiGroups": [
+     ""
+    ],
+    "resources": [
+     "secrets"
+    ],
+    "verbs": [
+     "get",
+     "list",
+     "watch"
+    ]
+   },
+   "old": null,
+   "op": "add",
+   "path": "/rules/2"
+  }
+ ],
+ "environment": "prod",
+ "namespace": "rabbitmq-prod",
+ "resource_kind": "Role",
+ "resource_name": "rabbitmq-prod-endpoint-reader"
+}

@@ -1,0 +1,34 @@
+{
+ "case_id": "CASE_0166",
+ "desired": {
+  "apiVersion": "v1",
+  "automountServiceAccountToken": false,
+  "kind": "ServiceAccount",
+  "metadata": {
+   "labels": {
+    "app.kubernetes.io/instance": "nginx-prod",
+    "app.kubernetes.io/managed-by": "Helm",
+    "app.kubernetes.io/name": "nginx",
+    "app.kubernetes.io/version": "1.31.7",
+    "environment": "prod",
+    "helm.sh/chart": "nginx-25.2.5"
+   },
+   "name": "nginx-prod",
+   "namespace": "nginx-prod"
+  }
+ },
+ "diff": [
+  {
+   "new": {
+    "deployment.timestamp": "2026-10-26T10:00:00Z"
+   },
+   "old": null,
+   "op": "add",
+   "path": "/metadata/annotations"
+  }
+ ],
+ "environment": "prod",
+ "namespace": "nginx-prod",
+ "resource_kind": "ServiceAccount",
+ "resource_name": "nginx-prod"
+}
