@@ -74,3 +74,7 @@ python evaluate.py --split test
 | κ Коэна (линейно взвешенная) | 0.934 |
 
 Подробные метрики: `results/metrics_test.json`. SHA-256 замороженных правил: `results/rules_frozen.sha256`.
+
+## Лицензия
+
+Проект распространяется по лицензии [MIT](LICENSE).
